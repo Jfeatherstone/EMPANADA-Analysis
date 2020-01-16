@@ -1,13 +1,12 @@
 % Load the video files and trial information from another file
-% This yields the following variable(s): trials
+% This yields the following variable(s): trials, fps
 load('LoadFiles.mat')
 
 % Empty array of structs that we will store results to
 %results = struct('averageBrightness', {}, 'frameTime', {}, 'averageGSquared', {});
 
-for i=1: length(trials)
-    
-    fprintf('Currently processing trial %i of %i:\n', i, length(trials));
+for i=3: length(trials)
+    fprintf('Currently processing trial %i of %i...', i, length(trials));
     %disp(trials(i).video.NumberofFrames)
     % Create a 1xN matrix for each frame of the video
     %currentVideo = VideoReader(trials(i).fullPath);
@@ -19,11 +18,7 @@ for i=1: length(trials)
     
     % We also want to keep track of what time each frame takes place at
     frameTime = zeros(1, currentVideo.NumberofFrames);
-    
-    % This is used for our progress bar in the while loop
-    progressString = '0%% complete';
-    fprintf(progressString);
-    
+    disp(currentVideo.NumberofFrames)
     % Now we iterate over every frame to populate the above matrices
     % Since this is done with a while loop, we also want to keep track of
     % the current frame number (changed since read() is depracated)
@@ -34,24 +29,6 @@ for i=1: length(trials)
     % which no longer exists.
     
     while hasFrame(currentVideo)
-        % These guys take quite a while to run, so I put in a progress bar
-        % here to track what's going on
-        % The string 'a\012b' represents a carriage return, which is
-        % similar to '\n' except that it returns to the beginning of the
-        % current line instead of going to a new one, which allows us to
-        % overwrite text
-        progress = round(n * 100 / currentVideo.NumFrames);
-        % Clear the line using backspace character '\b'
-        % This is kinda hacky: 10 is the number of characters in '%
-        % complete' (with a space) and the other part is the percent's
-        % length (could be 1, 2, or 3)
-        % Ironically, this whole process probably slows down the
-        % calculation lol...
-        fprintf(repmat('\b', 1, 10 + strlength(string(progress))));
-        
-        
-        % Now print the new stuff
-        progressString = fprintf('%i%% complete', progress);
         
         % Previous code saved each frame as a separate image, but that
         % doesn't seem necessary yet, so I will leave that out here
@@ -94,7 +71,7 @@ for i=1: length(trials)
         % each pixel of the image
         % I know my naming scheme is terrible here, but we already have a
         % matrix named 'averageGSquared' which this value will eventually
-        % be stored in, so this is the best I have for this variable
+        % be stored in, so this is the best I have for thi
         currentAverageGSquared = 0;
         
         % And we also need to store the G^2 at each pixel throughout the
@@ -142,8 +119,6 @@ for i=1: length(trials)
         % Now we divide out the dimensions for the average, as promised :)
         currentAverageGSquared = currentAverageGSquared / (diff(xlim) * diff(ylim));
         
-        % And store it into our matrix
-        averageGSquared(n) = currentAverageGSquared;
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %  END G SQUARED ANALYSIS
@@ -154,14 +129,8 @@ for i=1: length(trials)
         n = n + 1;
     end    
     
-    % Now we save all of the results we just found into our original trials
-    % struct, which has an empty spot for exactly this purpose
-    
-    
     results = struct('averageBrightness', averageBrightness, 'frameTime', frameTime, 'averageGSquared', averageGSquared);
-    trials(i).results = results;
-    
-    fprintf('...Processing complete!\n')
+    fprintf('Processing complete!\n')
     
     
 end

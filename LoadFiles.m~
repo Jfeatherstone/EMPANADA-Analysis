@@ -48,14 +48,14 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     % Make sure the size of the file is non-zero
     % This eliminates '.' and '..' which always show up
     if fileList(i).bytes == 0
-        fprintf('Invalid file: "%s": has size of 0 bytes (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset)
+        fprintf('Invalid file: "%s": has size of 0 bytes (%i of %i)\n', fileList(i).name, i, length(fileList))
         offset = offset + 1;
         continue
     end
     
     % Make sure we have a .mov extension
     if ~strcmp(fileList(i).name(end-3:end), '.mov')
-        fprintf('Invalid file: "%s": has incorrect extension (correct=.mov) (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset)
+        fprintf('Invalid file: "%s": has incorrect extension (correct=.mov) (%i of %i)\n', fileList(i).name, i, length(fileList))
         offset = offset + 1;
         continue
     end
@@ -86,7 +86,7 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     % nice to see where it is
     fullFilePath = strcat(fileDirectory, fileList(i).name);
     % Even throw a debug message in there
-    fprintf('Loading file "%s"... (%i of %i)\n', fullFilePath, i - offset, length(fileList) - offset)
+    fprintf('Loading file "%s"... (%i of %i)\n', fullFilePath, i, length(fileList))
     
     video = VideoReader(fullFilePath);
     
