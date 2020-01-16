@@ -22,6 +22,7 @@ for i=1: length(trials)
     
     % This is used for our progress bar in the while loop
     progressString = '0%% complete';
+    progress = '0';
     fprintf(progressString);
     
     % Now we iterate over every frame to populate the above matrices
@@ -40,7 +41,8 @@ for i=1: length(trials)
         % similar to '\n' except that it returns to the beginning of the
         % current line instead of going to a new one, which allows us to
         % overwrite text
-        progress = round(n * 100 / currentVideo.NumFrames);
+        
+        
         % Clear the line using backspace character '\b'
         % This is kinda hacky: 10 is the number of characters in '%
         % complete' (with a space) and the other part is the percent's
@@ -49,8 +51,8 @@ for i=1: length(trials)
         % calculation lol...
         fprintf(repmat('\b', 1, 10 + strlength(string(progress))));
         
-        
         % Now print the new stuff
+        progress = round(n * 100 / currentVideo.NumFrames);
         progressString = fprintf('%i%% complete', progress);
         
         % Previous code saved each frame as a separate image, but that
@@ -163,5 +165,6 @@ for i=1: length(trials)
     
     fprintf('...Processing complete!\n')
     
-    
 end
+
+save('AnalyzedData.mat', 'trials');

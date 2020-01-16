@@ -95,7 +95,7 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'video', video, 'results', 'N/A');
 end
 
-save('LoadFiles.mat', 'trials')
+save('LoadFiles.mat', 'trials');
 
 
 
