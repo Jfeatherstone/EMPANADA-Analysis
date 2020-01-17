@@ -1,8 +1,17 @@
 % Load in the final data that was analyzed
-load('AnalyzedData.mat')
+%load('AnalyzedData.mat')
 
-%for i = 1: length(trials)
-%   scatter(trials(i).results.frameTime, trials(i).results.averageBrightness) 
-%end
+% Instead of manually creating each type of graph in this file, we can just
+% have a standardized way of defining what we want to be on a graph and it
+% will do it automatically for us
+analysisOptions = containers.Map('KeyType', 'char', 'ValueType', 'any');
 
-scatter(trials(2).results.frameTime, trials(2).results.averageBrightness);
+% Here is a template struct that the analysis should define
+template = struct('enabled', {}, {}, 'xlabel', {}, 'ylabel', {}, 'legend', {});
+
+analysisOptions('Brightness Analysis By Speed') = struct('enabled', true,...
+                                                         'xlabel', 'Time [s]',...
+                                                         'ylabel', 'Average Brightness [arb. units]',...
+                                                         'legend', true...
+                                                         );
+analysisOptions('Brightness Analysis By Gravity') = true;

@@ -13,9 +13,9 @@ for i=1: length(trials)
     %currentVideo = VideoReader(trials(i).fullPath);
     currentVideo = trials(i).video;
     
-    averageBrightness = zeros(1, currentVideo.NumFrames);
+    averageBrightness = zeros(1, currentVideo.NumberofFrames);
     
-    averageGSquared = zeros(1, currentVideo.NumFrames);
+    averageGSquared = zeros(1, currentVideo.NumberofFrames);
     
     % We also want to keep track of what time each frame takes place at
     frameTime = zeros(1, currentVideo.NumberofFrames);
@@ -52,7 +52,7 @@ for i=1: length(trials)
         fprintf(repmat('\b', 1, 10 + strlength(string(progress))));
         
         % Now print the new stuff
-        progress = round(n * 100 / currentVideo.NumFrames);
+        progress = round(n * 100 / currentVideo.NumberofFrames);
         progressString = fprintf('%i%% complete', progress);
         
         % Previous code saved each frame as a separate image, but that
