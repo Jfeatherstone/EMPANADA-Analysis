@@ -25,7 +25,7 @@ trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'video', {}, 'results', {
 
 % Which file we want to start at
 % This is useful if we only want to look at a single trial for testing
-start = 0;
+start = length(fileList) - 1;
 
 % To keep our struct array looking nice (and not having blank spots in
 % between actual entries) we will use this offset index to adjust when we
