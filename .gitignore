@@ -1,0 +1,2 @@
+# We want to ignore all of the temp files that matlab makes
+*.m~
