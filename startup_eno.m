@@ -4,7 +4,7 @@
 global settings
 
 % set up where to read/save data
-username = 'yourIDhere';
+username = 'jdfeathe';
 settings.savepath = ['/eno/', username, '/'];
 settings.datapath = ['/eno/', username, '/DATA/'];
 settings.matlabpath = ['/eno/', username, '/MATLAB/'];
@@ -18,7 +18,8 @@ addpath(genpath(settings.matlabpath))
 % (the default size)
 if ~ismember('charfrac', fieldnames(settings))
     settings.charfrac=1.0;
-end;
+end
+
 settings.fontsize=24*settings.charfrac;
 settings.smallfontsize=18*settings.charfrac;
 settings.largefontsize=28*settings.charfrac;
