@@ -12,20 +12,20 @@
 % as a prefix later on
 
 % Use this path when working on a lab machine
-%fileDirectory = '/eno/jdfeathe/DATA/EMPANADA_Proper/';
+fileDirectory = '/eno/jdfeathe/DATA/EMPANADA_Proper/';
 
 % Use this path when working on my personal machine
-fileDirectory = '~/workspaces/matlab-workspace/EMPANADA-Proper/';
+%fileDirectory = '~/workspaces/matlab-workspace/EMPANADA-Proper/';
 
 fileList = dir(fileDirectory);
 
 % An empty array of the type of struct we will be using later
-%trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {});
-trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'video', {}, 'results', {});
+trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {});
+%trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'video', {}, 'results', {});
 
 % Which file we want to start at
 % This is useful if we only want to look at a single trial for testing
-start = length(fileList) - 1;
+start = 1;
 
 % To keep our struct array looking nice (and not having blank spots in
 % between actual entries) we will use this offset index to adjust when we
@@ -88,11 +88,11 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     % Even throw a debug message in there
     fprintf('Loading file "%s"... (%i of %i)\n', fullFilePath, i - offset, length(fileList) - offset)
     
-    video = VideoReader(fullFilePath);
+    %video = VideoReader(fullFilePath);
     
     % Add this trial into our array
-    %trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fullPath', fullFilePath);
-    trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'video', video, 'results', 'N/A');
+    trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fullPath', fullFilePath);
+    %trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'video', video, 'results', 'N/A');
 end
 
 save('LoadFiles.mat', 'trials');

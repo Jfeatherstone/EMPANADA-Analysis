@@ -2,6 +2,8 @@
 % This yields the following variable(s): trials
 load('LoadFiles.mat')
 
+diary outputlog-1-25-2020.txt
+
 % Empty array of structs that we will store results to
 %results = struct('averageBrightness', {}, 'frameTime', {}, 'averageGSquared', {});
 
@@ -11,14 +13,18 @@ for i=1: length(trials)
     %disp(trials(i).video.NumberofFrames)
     % Create a 1xN matrix for each frame of the video
     %currentVideo = VideoReader(trials(i).fullPath);
-    currentVideo = trials(i).video;
+    currentVideo = VideoReader(trials(i).fullPath);
     
-    averageBrightness = zeros(1, currentVideo.NumberofFrames);
+    numFrames = currentVideo.NumberofFrames;
+    % We have to reset the current time after calling NumberOfFrames
+    currentVideo = VideoReader(trials(i).fullPath);
     
-    averageGSquared = zeros(1, currentVideo.NumberofFrames);
+    averageBrightness = zeros(1, numFrames);
+    
+    averageGSquared = zeros(1, numFrames);
     
     % We also want to keep track of what time each frame takes place at
-    frameTime = zeros(1, currentVideo.NumberofFrames);
+    frameTime = zeros(1, numFrames);
     
     % This is used for our progress bar in the while loop
     progressString = '0%% complete';
@@ -52,7 +58,7 @@ for i=1: length(trials)
         fprintf(repmat('\b', 1, 10 + strlength(string(progress))));
         
         % Now print the new stuff
-        progress = round(n * 100 / currentVideo.NumberofFrames);
+        progress = round(n * 100 / numFrames);
         progressString = fprintf('%i%% complete', progress);
         
         % Previous code saved each frame as a separate image, but that
