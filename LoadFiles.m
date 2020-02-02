@@ -20,8 +20,8 @@ fileDirectory = '/eno/jdfeathe/DATA/EMPANADA_Proper/';
 fileList = dir(fileDirectory);
 
 % An empty array of the type of struct we will be using later
-trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {});
-%trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'video', {}, 'results', {});
+%trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {});
+trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {}, 'results', {});
 
 % Which file we want to start at
 % This is useful if we only want to look at a single trial for testing
