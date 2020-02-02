@@ -10,7 +10,7 @@ fontSize = 20;
 % These options are for export_fig; for more info, see the github repo
 % below:
 % https://github.com/altmany/export_fig/
-exportOptions = [' -nocrop', ' -painters'];
+exportOptions = '-nocrop -painters';
 
 for i=1: length(trials)
     % Create brightness graph
@@ -34,7 +34,7 @@ for i=1: length(trials)
     set(gca,'ytick',[]);
     set(gca,'yticklabel',[]);
     % Make the graph not pop up (since we'll be saving it to a file
-    set(gcf,'visible','off')
+    %set(gcf,'visible','off')
     % Set the font size
     set(gca, 'FontSize', fontSize);
     
@@ -47,8 +47,8 @@ for i=1: length(trials)
     % the folder where you have downloaded the files from the repo
     % We define out options above so that everything can be uniform and
     % easily changed
-    export_fig(saveFilePathPNG, exportOptions);
-    clf
+    export_fig(saveFilePathPNG);
+    %clf
     
     % Create gsquared graph
     figure(3*i + 1);
@@ -75,8 +75,8 @@ for i=1: length(trials)
     saveFilePath = strcat('Output/', 'Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-GSquared.fig');
     saveFilePathPNG = strcat('Output-PNG/', 'Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-GSquared');
     savefig(saveFilePath);
-    export_fig(saveFilePathPNG, exportOptions);
-    clf
+    export_fig(saveFilePathPNG);
+    %clf
     
     % Create comparison graph
     figure(3*i + 2);
@@ -105,6 +105,6 @@ for i=1: length(trials)
     saveFilePath = strcat('Output/', 'Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-Comparison.fig');
     saveFilePathPNG = strcat('Output-PNG/', 'Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-Comparison');
     savefig(saveFilePath);
-    export_fig(saveFilePathPNG, exportOptions);
-    clf
+    export_fig(saveFilePathPNG);
+    %clf
 end

@@ -9,14 +9,19 @@ trialNum = 1;
 
 % We want to normalize the data to keep things clean (doesn't really matter
 % other than that)
-normalizedData = trials(trialNum).results.averageBrightness - trials(trialNum).results.averageBrightness(1);
-normalizedData = normalizedData / max(abs(normalizedData));
+brightnessData = (trials(trialNum).results.averageBrightness - mean(trials(trialNum).results.averageBrightness));
+brightnessData = brightnessData / max(brightnessData);
+
+gSquaredData = (trials(trialNum).results.averageGSquared - mean(trials(trialNum).results.averageGSquared));
+gSquaredData = gSquaredData / max(gSquaredData);
+
 
 Xdata = trials(trialNum).results.frameTime;
-Ydata = normalizedData;
+Y1data = brightnessData;
+Y2data = gSquaredData;
 
 % We want to draw a vertical line to follow the current point
-verticalLineBounds = [1.2 * max(normalizedData), 1.2 * min(normalizedData)];
+verticalLineBounds = [1.2 * max(gSquaredData), 1.2 * min(gSquaredData)];
 
 % This is an arbitrarily chosen value that just accounts for the minute
 % amount of time that it takes for a for loop to process things. I used
@@ -27,21 +32,26 @@ forLoopEvaluationTolerance = .0004;
 for i = 1: length(Xdata)
     % We want to keep track of how long it takes to perform the following
     % actions so that we can keep up with real time
-    tic
+    tic    
     
     % Draw all of the data
-    linePlot = plot(axh, Xdata, Ydata);
-    
-    % Highlight the current point with a special character and a vertical
-    % line (on the same plot)
+    linePlot1 = plot(axh, Xdata, Y1data);
     hold on
-    point = plot(axh, Xdata(i), Ydata(i), '*', 'MarkerSize', 15);
+    linePlot2 = plot(axh, Xdata, Y2data);
+    
+    legend('Average Brightness', 'Average G Squared');
+    
+    % Highlight the point with a special character and a vertical
+    % line (on the same plot)
+    point1 = plot(axh, Xdata(i), Y1data(i), '*', 'MarkerSize', 15);
+    point2 = plot(axh, Xdata(i), Y2data(i), '*', 'MarkerSize', 15);
+
     plot(axh, [Xdata(i), Xdata(i)], verticalLineBounds, 'm--');
     
     % Title and axes
-    title('Average Brightness of Image vs. Time')
+    title('Average Brightness of Image and G Squared vs. Time')
     xlabel('Time [s]')
-    ylabel('Average Brightness [arb. units]')
+    ylabel('Average Brightness / G Squared [arb. units]')
     
     if i > 1
         % This is how much time we should wait, which accounts for the time
