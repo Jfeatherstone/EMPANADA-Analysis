@@ -164,13 +164,16 @@ for i=1: length(trials)
     
     % Now we save all of the results we just found into our original trials
     % struct, which has an empty spot for exactly this purpose
-    
-    
     results = struct('averageBrightness', averageBrightness, 'frameTime', frameTime, 'averageGSquared', averageGSquared);
     trials(i).results = results;
+    
+    % Save in between each trial, so if it crashes we at least get some
+    % data
+    save('AnalyzedData.mat', 'trials');
     
     fprintf('...Processing complete!\n')
     
 end
 
+% And save at the end just in case
 save('AnalyzedData.mat', 'trials');
