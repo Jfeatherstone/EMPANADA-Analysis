@@ -14,7 +14,7 @@ startup_laptop;
 brightnessLineColor = '#0072BD'; % Default blue
 gSquaredLineColor = '#7E2F8E'; % Default purple
 
-for i=length(trials): length(trials)
+for i=1: length(trials)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %           BRIGHTNESS
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,7 +38,7 @@ for i=length(trials): length(trials)
     set(gca,'ytick',[]);
     set(gca,'yticklabel',[]);
     % Make the graph not pop up (since we'll be saving it to a file)
-    %set(gcf,'visible','off')
+    set(gcf,'visible','off')
     
     % Now save the figure
     saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-Brightness'];
