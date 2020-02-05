@@ -2,7 +2,6 @@
 % Loads in the following variable(s): trials
 load('AnalyzedData.mat')
 
-
 figureWidth = 720;
 figureHeight = 480;
 
