@@ -56,7 +56,7 @@ while hasFrame(video)
     linePlot1 = plot(Xdata, Y1data, 'Color', brightnessLineColor);
     hold on
     linePlot2 = plot(Xdata, Y2data, 'Color', gSquaredLineColor);
-    
+
     legend('Average Brightness', 'Average G Squared');
     
     plot([Xdata(i), Xdata(i)], verticalLineBounds, 'b--', 'HandleVisibility', 'off');
