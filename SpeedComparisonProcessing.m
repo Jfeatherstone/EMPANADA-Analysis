@@ -32,14 +32,37 @@ end
 % We also want to sort our trials by speed, so that way they are graphed in
 % an order that actually makes sense
 
-% Now that we have them separated, we can graph all of them
+% We first have to convert the speeds to numbers
+for i=1: length(lunarGravityTrials)
+   lunarGravityTrials(i).speed = str2double(lunarGravityTrials(i).speed);
+end
+
+[values, index] = sort([lunarGravityTrials.speed], 'ascend');
+lunarGravityTrials = lunarGravityTrials(index);
+%lunarBrightnessNormalization = max(lunarGravityTrials.results.averageBrightness);
+%lunarGSquaredNormalization = max(lunarGravityTrials.results.averageGSquared);
+
+for i=1: length(martianGravityTrials)
+   martianGravityTrials(i).speed = str2double(martianGravityTrials(i).speed);
+end
+
+[values, index] = sort([martianGravityTrials.speed], 'ascend');
+martianGravityTrials = martianGravityTrials(index);
+
+for i=1: length(microGravityTrials)
+   microGravityTrials(i).speed = str2double(microGravityTrials(i).speed);
+end
+
+[values, index] = sort([microGravityTrials.speed], 'ascend');
+microGravityTrials = microGravityTrials(index);
+
+% Now that we have them separated and sorted, we can graph all of them
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %       LUNAR
 %%%%%%%%%%%%%%%%%%%%%%%
 
 % We don't want graphs to overlap, so we put an offset in here
-% We use 2 here since our y limits and -1 to 1, which has a height of 2
 offsetFactor = 1 / length(lunarGravityTrials);
 
 figure(1);
@@ -56,7 +79,6 @@ set(gca,'yticklabel',[]);
 ylim([-1, 1]);
 legend();
 
-hold on;
 for i=1: length(lunarGravityTrials)
     % This is the same normalization that is done in BasicPostProcessing
     brightnessData = (lunarGravityTrials(i).results.averageBrightness - mean(lunarGravityTrials(i).results.averageBrightness));
@@ -65,10 +87,15 @@ for i=1: length(lunarGravityTrials)
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
     brightnessData = brightnessData - 1 + (2*i - 1) * offsetFactor;
-    plot(lunarGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [lunarGravityTrials(i).speed, ' mm/s']);
+    plot(lunarGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(lunarGravityTrials(i).speed), ' mm/s']);
 
 end
-
+% Now save the figure
+saveFileNameNoExtension = ['Day', lunarGravityTrials(1).day, '-Lunar-SpeedComparison'];
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(1, saveFileNameNoExtension);
+hold off
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %       MARTIAN
@@ -100,10 +127,15 @@ for i=1: length(martianGravityTrials)
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
     brightnessData = brightnessData - 1 + (2*i - 1) * offsetFactor;
-    plot(martianGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [martianGravityTrials(i).speed, ' mm/s']);
+    plot(martianGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(martianGravityTrials(i).speed), ' mm/s']);
 
 end
-
+% Now save the figure
+saveFileNameNoExtension = ['Day', martianGravityTrials(1).day, '-Martian-SpeedComparison'];
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(2, saveFileNameNoExtension);
+hold off
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %       MICRO
@@ -135,6 +167,12 @@ for i=1: length(microGravityTrials)
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
     brightnessData = brightnessData - 1 + (2*i - 1) * offsetFactor;
-    plot(microGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [microGravityTrials(i).speed, ' mm/s']);
+    plot(microGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(microGravityTrials(i).speed), ' mm/s']);
 
 end
+% Now save the figure
+saveFileNameNoExtension = ['Day', microGravityTrials(1).day, '-Micro-SpeedComparison'];
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(3, saveFileNameNoExtension);
+hold off

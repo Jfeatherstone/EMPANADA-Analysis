@@ -101,6 +101,6 @@ for i=1: length(trials)
     saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-Comparison'];
     % This is a custom figure saving method, see file for more info
     % (printfig.m)
-    printfig(3*i + 2, saveFileNameNoExtension);
+    printfig(3*i + 1, saveFileNameNoExtension);
     %clf
 end
