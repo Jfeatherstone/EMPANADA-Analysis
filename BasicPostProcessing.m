@@ -80,8 +80,8 @@ for i=1: length(trials)
     figure(3*i + 2);
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     hold on
-    plot(trials(i).results.frameTime, brightnessData, 'Color', brightnessLineColor, 'DisplayName', 'Average Brightness');
-    plot(trials(i).results.frameTime, gsquaredData, 'Color', gSquaredLineColor, 'DisplayName', 'Average G Squared');
+    plot(trials(i).results.frameTime, brightnessData, 'Color', brightnessLineColor, 'DisplayName', ['Average Brightness', num2str(i)]);
+    plot(trials(i).results.frameTime, gsquaredData, 'Color', gSquaredLineColor, 'DisplayName', ['Average G Squared', num2str(i)]);
     
     % Create the title
     title(titleStr);
@@ -95,12 +95,17 @@ for i=1: length(trials)
     set(gcf,'visible','off')
 
     % Make sure we have a legend
+    % I think there's currently a bug that will sometimes show like 8
+    % entries for each legend, but I have no idea what's causing it and I
+    % can't consistently recreate it, so :/
     legend();
     
     % Now save the figure
     saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-Comparison'];
     % This is a custom figure saving method, see file for more info
     % (printfig.m)
-    printfig(3*i + 1, saveFileNameNoExtension);
+    printfig(3*i + 2, saveFileNameNoExtension);
     %clf
+    
+    hold off
 end
