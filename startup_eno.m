@@ -5,9 +5,12 @@ global settings
 
 % set up where to read/save data
 username = 'jdfeathe';
-settings.savepath = ['/eno/', username, '/'];
-settings.datapath = ['/eno/', username, '/DATA/'];
-settings.matlabpath = ['/eno/', username, '/MATLAB/'];
+settings.png_savepath = ['/eno/', username, '/EMPANADA-Analysis/Output-png/'];
+settings.fig_savepath = ['/eno/', username, '/EMPANADA-Analysis/Output-fig/'];
+settings.avi_savepath = ['/eno/', username, '/EMPANADA-Analysis/Output-avi/'];
+
+settings.datapath = ['/eno/', username, '/DATA/EMPANADA-Proper/'];
+settings.matlabpath = ['/eno/', username, '/EMPANADA-Analysis/'];
 
 addpath(genpath(settings.matlabpath))
 
@@ -35,5 +38,5 @@ cd(settings.matlabpath)
 
 clear c hostname result username
 
-opengl software
+%opengl software
 % Ted says that this produces as error message about openGL not working on Unix, but that it fixes crashes that were happening previousl

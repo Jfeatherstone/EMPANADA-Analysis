@@ -7,6 +7,7 @@ global settings
 username = 'jack';
 settings.png_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-png/'];
 settings.fig_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-fig/'];
+settings.avi_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-avi/'];
 
 settings.datapath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Proper/'];
 settings.matlabpath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/'];
