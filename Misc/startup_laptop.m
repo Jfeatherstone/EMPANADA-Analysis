@@ -38,5 +38,8 @@ cd(settings.matlabpath)
 
 %clear c hostname result username
 
+% Initialize some constants
+initialize_constants;
+
 %opengl software
 % Ted says that this produces as error message about openGL not working on Unix, but that it fixes crashes that were happening previousl

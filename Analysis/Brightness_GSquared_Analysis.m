@@ -2,27 +2,25 @@
 % This yields the following variable(s): trials
 load('LoadFiles.mat')
 
-diary outputlog-1-25-2020.txt
+diary(['outputlog-', datestr(now,'yyyy-mm-dd') ,'.txt']);
 
 % Empty array of structs that we will store results to
+% We don't actually need this array anymore, but we will create structs
+% that have the same form below
 %results = struct('averageBrightness', {}, 'frameTime', {}, 'averageGSquared', {});
 
 for i=1: length(trials)
     
     fprintf('Currently processing trial %i of %i:\n', i, length(trials));
-    %disp(trials(i).video.NumberofFrames)
-    % Create a 1xN matrix for each frame of the video
-    %currentVideo = VideoReader(trials(i).fullPath);
-    currentVideo = VideoReader(trials(i).fullPath);
+    currentVideo = VideoReader([settings.datapath, trials(i).fileName]);
     
     numFrames = currentVideo.NumberofFrames;
     % We have to reset the current time after calling NumberOfFrames
-    currentVideo = VideoReader(trials(i).fullPath);
+    currentVideo = VideoReader([settings.datapath, trials(i).fileName]);
     
+    % Create a 1xN matrix for each frame of the video
     averageBrightness = zeros(1, numFrames);
-    
     averageGSquared = zeros(1, numFrames);
-    
     % We also want to keep track of what time each frame takes place at
     frameTime = zeros(1, numFrames);
     
@@ -160,7 +158,7 @@ for i=1: length(trials)
         
         % Increment n
         n = n + 1;
-    end    
+    end
     
     % Now we save all of the results we just found into our original trials
     % struct, which has an empty spot for exactly this purpose
@@ -169,11 +167,11 @@ for i=1: length(trials)
     
     % Save in between each trial, so if it crashes we at least get some
     % data
-    save('AnalyzedData.mat', 'trials');
+    save('Brightness_GSquared_Analysis.mat', 'trials');
     
     fprintf('...Processing complete!\n')
     
 end
 
 % And save at the end just in case
-save('AnalyzedData.mat', 'trials');
+save('Brightness_GSquared_Analysis.mat', 'trials');

@@ -1,27 +1,19 @@
 % This files loads in all of the videos, as well as parses some info from their file names.
 % I have renamed files so that they looks as follows:
-% Day<1|2>-<Martian|Lunar|Micro>-<Speed>mms.mov
+% Day<1|2>-<Martian|Lunar|Micro>-<Speed>mms[-<repetition #>].mov
 
 % A sheet that connects these new names to the raw names can be found
 % in the Google Drive can be found in the same drive under:
 % "Project EMPANADA/DATA/EMPANADA Data Files Key"
 
 % This lists all of the files in the following path
-% If the video files are later moved, but sure to update this
-% NOTE: Be sure that this ends in a '/' character, as it is used
-% as a prefix later on
-
-% Use this path when working on a lab machine
-fileDirectory = '/eno/jdfeathe/DATA/EMPANADA_Proper/';
-
-% Use this path when working on my personal machine
-%fileDirectory = '~/workspaces/matlab-workspace/EMPANADA-Proper/';
-
-fileList = dir(fileDirectory);
+% Be sure to run the proper startup file, so that settings.datapath is
+% defined
+fileList = dir(settings.datapath);
 
 % An empty array of the type of struct we will be using later
 %trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {});
-trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {}, 'results', {});
+trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'results', {});
 
 % Which file we want to start at
 % This is useful if we only want to look at a single trial for testing
@@ -80,19 +72,17 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     speed = char(nameFields(3));
     speed = speed(1:end-3);
     
-    % We can't just use the name (since it would be a relative path) so we
-    % add the foler defined above as a prefix
-    % Going to leave this to output since it takes a hot minute and its
-    % nice to see where it is
-    fullFilePath = strcat(fileDirectory, fileList(i).name);
+    % There may or may not be a fourth entry in name fields, if we have
+    % multiple trials that have the same parameters, but this doesn't
+    % actually matter to us, so we ignore it (but obviously keep it in the
+    % name)
+    
+    fileName = fileList(i).name;
     % Even throw a debug message in there
-    fprintf('Loading file "%s"... (%i of %i)\n', fullFilePath, i - offset, length(fileList) - offset)
-    
-    %video = VideoReader(fullFilePath);
-    
+    fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset)
+        
     % Add this trial into our array
-    trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fullPath', fullFilePath);
-    %trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'video', video, 'results', 'N/A');
+    trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'results', 'N/A');
 end
 
 save('LoadFiles.mat', 'trials');
