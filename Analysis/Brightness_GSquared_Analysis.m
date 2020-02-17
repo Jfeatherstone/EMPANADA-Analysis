@@ -1,6 +1,6 @@
 % Load the video files and trial information from another file
 % This yields the following variable(s): trials
-load('LoadFiles.mat')
+load('Preprocessing/LoadFiles.mat')
 
 diary(['outputlog-', datestr(now,'yyyy-mm-dd') ,'.txt']);
 
