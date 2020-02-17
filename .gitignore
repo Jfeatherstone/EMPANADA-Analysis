@@ -1,2 +1,4 @@
 # We want to ignore all of the temp files that matlab makes
 *.m~
+# Ignore all avi files since they're too big to store on github
+*.avi
