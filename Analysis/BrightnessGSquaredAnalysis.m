@@ -2,7 +2,7 @@
 % This yields the following variable(s): trials
 load('Preprocessing/LoadFiles.mat')
 
-diary(['outputlog-', datestr(now,'yyyy-mm-dd') ,'.txt']);
+%diary(['outputlog-', datestr(now,'yyyy-mm-dd') ,'.txt']);
 
 % Empty array of structs that we will store results to
 % We don't actually need this array anymore, but we will create structs
