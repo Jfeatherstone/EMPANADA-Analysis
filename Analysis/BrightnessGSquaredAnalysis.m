@@ -150,7 +150,7 @@ for i=1: length(trials)
         
         % And store it into our matrix
         averageGSquared(n) = currentAverageGSquared;
-                
+        
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %  END G SQUARED ANALYSIS
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,11 +167,11 @@ for i=1: length(trials)
     
     % Save in between each trial, so if it crashes we at least get some
     % data
-    save('Brightness_GSquared_Analysis.mat', 'trials');
+    save('BrightnessGSquaredAnalysis.mat', 'trials');
     
     fprintf('...Processing complete!\n')
     
 end
 
 % And save at the end just in case
-save('Brightness_GSquared_Analysis.mat', 'trials');
+save('BrightnessGSquaredAnalysis.mat', 'trials');
