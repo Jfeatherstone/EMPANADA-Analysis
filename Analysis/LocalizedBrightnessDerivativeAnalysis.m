@@ -1,0 +1,98 @@
+% This file finds the average derivative of brightness for each column and
+% each row of the image file, so we can determine an area of effect of the
+% probe
+% Load our raw trials
+load('Preprocessing/LoadFiles.mat', 'trials');
+
+% What our results struct will look like
+%results = struct('frameTime', {}, 'averageColumnBrightness', {}, 'averageRowBrightness', {});
+
+% We first want to load in the brightness average by row and column, and
+% we'll take derivatives after
+
+for i=1: length(trials)
+   
+    % Load in our video
+    video = VideoReader([settings.datapath, trials(i).fileName]);
+    frameTimeDifference = 1 / video.FrameRate;
+    
+    % We shouldn't have any issues since this value that is being casted to
+    % an int should always be exact eg. 1320.0000000000 since these values
+    % should be complementary
+    numFrames = int32(video.Duration / frameTimeDifference);
+    frameTime = zeros(1, numFrames);
+    
+    dim = [video.Width, video.Height];
+    
+    % Setup arrays
+    averageRowBrightness = zeros(dim(2), numFrames);
+    averageColumnBrightness = zeros(dim(1), numFrames);
+    
+    % This is because we want to record values in the above arrays, so we
+    % need an index
+    currentFrameNum = 1;
+    
+    while hasFrame(video)
+        % Grab the current frame
+       currentFrame = readFrame(video);
+       
+       % Grab current time
+       frameTime(i) = video.CurrentTime;
+       
+       % Converting the frame to gray-scale yields better results
+       currentFrameGrayScale = rgb2gray(currentFrame);
+       
+       % Average the rows
+       for j=1: dim(2)
+           averageRowBrightness(currentFrameNum, j) = mean(currentFrameGrayScale(j, 1:end));
+       end
+       
+       % Average the columns
+       for j=1: dim(1)
+          averageColumnBrightness(currentFrameNum, j) = mean(currentFrameGrayScale(1:end, j)); 
+       end
+       
+       % Increment the frame number
+       currentFrameNum = currentFrameNum + 1;
+       
+    end
+    
+    
+    % Now that we have all of the brightness values, we take the centered
+    % difference stencil
+    % For obvious reasons, we throw away the first and last point
+    averageRowBrightnessDerivative = zeros(dim(2), numFrames - 2);
+    averageColumnBrightnessDerivative = zeros(dim(1), numFrames - 2);
+    
+    % This differentiation code is copied (more or less) from
+    % BrightnessDerivativeAnalysis.m
+    
+    % Rows
+    for j=2: numFrames - 1
+        for k=1: dim(2)
+            averageRowBrightnessDerivative(j-1, k) = ((averageRowBrightness(j-1, k) - averageRowBrightness(j+1, k)) / (2 * frameTimeDifference));
+        end
+    end
+    
+    % Columns
+    for j=2: numFrames - 1
+        for k=1: dim(1)
+            averageColumnBrightnessDerivative(j-1, k) = ((averageColumnBrightness(j-1, k) - averageColumnBrightness(j+1, k)) / (2 * frameTimeDifference));
+        end
+    end
+    
+    % Now plot it
+    figure(i);
+    title('d/dt Brightness by Columns');
+    s = surf(averageColumnBrightnessDerivative);
+    
+    set(s,'LineStyle','none')
+    
+    % Could be wrong
+    xlabel('Column number');
+    ylabel('Frame number');
+    
+    zlabel('Norm of dB/dt');
+    
+    break;
+end

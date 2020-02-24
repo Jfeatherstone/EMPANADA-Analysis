@@ -10,7 +10,7 @@
 
 minimumLineLength = 35;
 
-trials = struct('day', '1', 'gravity', 'Lunar', 'speed', '210', 'fileName', 'Day1-Lunar-210mms.mov');
+trials = struct('day', '1', 'gravity', 'Lunar', 'speed', '70', 'fileName', 'Day1-Lunar-70mms.mov');
 
 for i=1: length(trials)
     % We are going to load the video, so that we can track the probe
@@ -36,7 +36,7 @@ for i=1: length(trials)
        lines = houghlines(binaryFrame,T,R,P,'FillGap', 1, 'MinLength', minimumLineLength);
        disp(length(lines));
        imshow(binaryFrame);
-       hold on7
+       hold on
        
        maxLength = 0;
        
