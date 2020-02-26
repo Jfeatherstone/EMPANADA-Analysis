@@ -25,7 +25,6 @@ if ~exist('startupFile', 'var')
     startupFile = 'StartupLaptop';
 end
 run(startupFile)
-
 % And allow the variable settings to be accessed
 global settings
 
@@ -133,7 +132,7 @@ for i=1: length(trials)
     %set(gca,'ytick',[]);
     %set(gca,'yticklabel',[]);
     % Make the graph not pop up (since we'll be saving it to a file
-    %set(gcf,'visible','off')
+    set(gcf,'visible','off')
 
     % Now save the figure
     saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-BrightnessDerivativeSquared'];
