@@ -2,11 +2,13 @@ function trials = LoadFiles(startupFile)
 
 % In case the startup file is not provided, default to my laptop
 if ~exist('startupFile', 'var')
-    fprintf('Warning: startup file not specified, defaulting to laptop (startup_laptop.m)!\n')
-    run Misc/startup_laptop.m
+    fprintf('Warning: startup file not specified, defaulting to laptop (StartupLaptop.m)!\n')
+    StartupLaptop()
 else
-   run(['Misc/', startupFile])
+   	run(startupFile)
 end
+% And allow the variable settings to be accessed
+global settings
 
 % Make sure that the startup file has been run
 % This shouldn't ever error since we just checked, but I have it here just

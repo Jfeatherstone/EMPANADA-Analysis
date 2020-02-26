@@ -1,6 +1,9 @@
+
+function StartupEno()
 % defines some useful default parameters in a variable called settings
 % to use these settings in a function include the same line "global
 % settings" in functions you write
+
 global settings
 
 % set up where to read/save data
@@ -38,8 +41,6 @@ cd(settings.matlabpath)
 
 clear c hostname result username
 
-% And initialize some constants I've made
-initialize_constants;
-
 %opengl software
 % Ted says that this produces as error message about openGL not working on Unix, but that it fixes crashes that were happening previousl
+end % Function end
