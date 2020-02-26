@@ -5,12 +5,12 @@ function trials = BrightnessAnalysis(startupFile, matFileContainingTrials)
 % In case data is not provided, we default to the output of LoadFiles.m
 if ~exist('matFileContainingTrials', 'var')
    matFileContainingTrials = 'Preprocessing/LoadFiles.mat';
-   fprintf('Warning: file list not provided, defaulting to %s\n', matFileContainingTrials);
+   fprintf('Warning: file list not provided, defaulting to %s!\n', matFileContainingTrials);
 end
 
 % In case the startup file is not provided, default to my laptop
 if ~exist('startupFile', 'var')
-    fprintf('Warning: startup file not specified, defaulting to laptop (startup_laptop.m)\n')
+    fprintf('Warning: startup file not specified, defaulting to laptop (startup_laptop.m)!\n')
     run Misc/startup_laptop.m
 else
    run(['Misc/', startupFile])
@@ -23,6 +23,16 @@ if ~exist('settings', 'var')
    fprintf('Error: startup program has not been run, datapath not defined!\n') 
    return
 end
+
+% We also want to make sure that the output file is always saved inside the
+% Analysis folder, so if we are running the function from elsewhere, we
+% need to account for that
+outputPath = 'BrightnessAnalysis.mat';
+if ~strcmp(pwd, strcat(settings.matlabpath, 'Analysis'))
+   fprintf('Warning: analysis script not run from Analysis directory, accouting for this in output path!\n')
+   outputPath = [settings.matlabpath, 'Analysis/BrightnessAnalysis.mat'];
+end
+
 
 % Most of the code here is taken from BrightnessGSquaredAnalysis.m and the
 % purpose is just to separate the two methods, since G Squared takes much
@@ -73,7 +83,7 @@ for i=1: length(trials)
  
         currentFrameNumber = currentFrameNumber + 1;
     end
-        
+    
     % Now calculate the derivative of the brightness
     
     brightnessDerivative = zeros(1, numFrames);
@@ -97,7 +107,7 @@ for i=1: length(trials)
     
     % Save in between each trial, so if it crashes we at least get some
     % data
-    save('BrightnessAnalysis.mat', 'trials');
+    save(outputPath, 'trials');
     
     fprintf('...Processing complete!\n')
 

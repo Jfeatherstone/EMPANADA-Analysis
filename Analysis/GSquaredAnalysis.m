@@ -22,6 +22,16 @@ if ~exist('settings', 'var')
    return
 end
 
+% We also want to make sure that the output file is always saved inside the
+% Analysis folder, so if we are running the function from elsewhere, we
+% need to account for that
+outputPath = 'GSquaredAnalysis.mat';
+if ~strcmp(pwd, strcat(settings.matlabpath, 'Analysis'))
+   fprintf('Warning: analysis script not run from Analysis directory, accouting for this in output path!\n')
+   outputPath = [settings.matlabpath, 'Analysis/GSquaredAnalysis.mat'];
+end
+
+
 % Load the video files and trial information from another file
 load(matFileContainingTrials, 'trials')
 
@@ -166,7 +176,7 @@ for i=1: length(trials)
     
     % Save in between each trial, so if it crashes we at least get some
     % data
-    save('GSquaredAnalysis.mat', 'trials');
+    save(outputPath, 'trials');
     fprintf('...Processing complete!\n')
     
 end

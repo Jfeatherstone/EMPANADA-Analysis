@@ -4,8 +4,8 @@
 
 Below is a list of all of the files contained in this repo, including what they do (or attempt to do) and what methods they use.
 
-### Preprocessing
 ---
+### Preprocessing
 
 #### LoadFiles.m
 
@@ -13,8 +13,8 @@ This file organizes the data files based on their file name and loads them into 
 
 The script assumes that all files are named using the convention `Day<#>-<Gravity>-<speed>mms.mkv` and that they are located in the directory defined by either of the startup files (see Misc section)
 
-### Analysis
 ---
+### Analysis
 
 #### Brightness_GSquared_Analysis.m
 
@@ -22,8 +22,8 @@ This is currently the only analysis file that I have been using, and it calculat
 
 This takes in the `trials` struct that is created in `LoadFiles.m` and outputs the same struct to `AnalyzedData.mat` with the results appended as a field.
 
-### Postprocessing
 ---
+### Postprocessing
 
 #### BrightnessPostprocessing.m
 
@@ -60,8 +60,8 @@ This script produces 2 figures for each entry in `trials`:
 
 In the future, I will likely convert the actual stencil calculation into its own analysis file, that way the method can be used in other figures too.
 
-### Misc
 ---
+### Misc
 
 #### startup_laptop.m
 
