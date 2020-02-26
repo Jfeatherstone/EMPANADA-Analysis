@@ -1,6 +1,8 @@
 
 function trials = BrightnessAnalysis(startupFile, matFileContainingTrials)
-
+% Most of the code here is taken from BrightnessGSquaredAnalysis.m and the
+% purpose is just to separate the two methods, since G Squared takes much
+% longer to run
 
 % In case data is not provided, we default to the output of LoadFiles.m
 if ~exist('matFileContainingTrials', 'var')
@@ -32,11 +34,6 @@ if ~strcmp(pwd, strcat(settings.matlabpath, 'Analysis'))
    fprintf('Warning: analysis script not run from Analysis directory, accouting for this in output path!\n')
    outputPath = [settings.matlabpath, 'Analysis/BrightnessAnalysis.mat'];
 end
-
-
-% Most of the code here is taken from BrightnessGSquaredAnalysis.m and the
-% purpose is just to separate the two methods, since G Squared takes much
-% longer to run
 
 % Load the video files and trial information from another file
 load(matFileContainingTrials, 'trials')

@@ -1,3 +1,4 @@
+
 function trials = GSquaredAnalysis(startupFile, matFileContainingTrials)
 
 % In case data is not provided, we default to the output of LoadFiles.m
@@ -30,7 +31,6 @@ if ~strcmp(pwd, strcat(settings.matlabpath, 'Analysis'))
    fprintf('Warning: analysis script not run from Analysis directory, accouting for this in output path!\n')
    outputPath = [settings.matlabpath, 'Analysis/GSquaredAnalysis.mat'];
 end
-
 
 % Load the video files and trial information from another file
 load(matFileContainingTrials, 'trials')
