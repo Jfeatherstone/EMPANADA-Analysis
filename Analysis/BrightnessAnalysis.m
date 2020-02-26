@@ -16,8 +16,6 @@ else
    run(['Misc/', startupFile])
 end
 
-disp(settings.datapath)
-
 % Make sure that the startup file has been run
 % This shouldn't ever error since we just checked, but I have it here just
 % in case something wack happens
@@ -31,7 +29,6 @@ end
 % longer to run
 
 % Load the video files and trial information from another file
-% This yields the following variable(s): trials
 load(matFileContainingTrials, 'trials')
 
 % Empty array of structs that we will store results to
