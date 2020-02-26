@@ -1,3 +1,30 @@
+function trials = LoadFiles(startupFile)
+
+% In case the startup file is not provided, default to my laptop
+if ~exist('startupFile', 'var')
+    fprintf('Warning: startup file not specified, defaulting to laptop (startup_laptop.m)!\n')
+    run Misc/startup_laptop.m
+else
+   run(['Misc/', startupFile])
+end
+
+% Make sure that the startup file has been run
+% This shouldn't ever error since we just checked, but I have it here just
+% in case something wack happens
+if ~exist('settings', 'var')
+   fprintf('Error: startup program has not been run, datapath not defined!\n') 
+   return
+end
+
+% We also want to make sure that the output file is always saved inside the
+% Analysis folder, so if we are running the function from elsewhere, we
+% need to account for that
+outputPath = 'LoadFiles.mat';
+if ~strcmp(pwd, strcat(settings.matlabpath, 'Preprocessing'))
+   fprintf('Warning: preprocessing script not run from Preprocessing directory, accouting for this in output path!\n')
+   outputPath = [settings.matlabpath, 'Preprocessing/LoadFiles.mat'];
+end
+
 % This files loads in all of the videos, as well as parses some info from their file names.
 % I have renamed files so that they looks as follows:
 % Day<1|2>-<Martian|Lunar|Micro>-<Speed>mms[-<repetition #>].mov
@@ -12,7 +39,6 @@
 fileList = dir(settings.datapath);
 
 % An empty array of the type of struct we will be using later
-%trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fullPath', {});
 trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'results', {});
 
 % Which file we want to start at
@@ -85,7 +111,9 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'results', 'N/A');
 end
 
-save('LoadFiles.mat', 'trials');
+save(outputPath, 'trials');
+
+end % Function end
 
 
 
