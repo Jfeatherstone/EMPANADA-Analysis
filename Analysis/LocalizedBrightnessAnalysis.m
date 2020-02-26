@@ -11,7 +11,8 @@ load('Preprocessing/LoadFiles.mat', 'trials');
 % we'll take derivatives after
 
 for i=1: length(trials)
-   
+    fprintf('Currently processing trial %i of %i:\n', i, length(trials));
+
     % Load in our video
     video = VideoReader([settings.datapath, trials(i).fileName]);
     frameTimeDifference = 1 / video.FrameRate;
@@ -81,18 +82,10 @@ for i=1: length(trials)
         end
     end
     
-    % Now plot it
-    figure(i);
-    title('d/dt Brightness by Columns');
-    s = surf(averageColumnBrightnessDerivative);
+    results = struct('frameTime', frameTime, 'averageRowBrightness', averageRowBrightness, 'averageRowBrightnessDerivative', averageRowBrightnessDerivative, 'averageColumnBrightness', averageColumnBrightness, 'averageColumnBrightnessDerivative', averageColumnBrightnessDerivative);
+    trials(i).results = results;
     
-    set(s,'LineStyle','none')
+    save('LocalizedBrightnessAnalysis.mat', 'trials');
     
-    % Could be wrong
-    xlabel('Column number');
-    ylabel('Frame number');
-    
-    zlabel('Norm of dB/dt');
-    
-    break;
+    fprintf('...Processing complete!\n')
 end

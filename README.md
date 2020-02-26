@@ -25,9 +25,9 @@ This takes in the `trials` struct that is created in `LoadFiles.m` and outputs t
 ### Postprocessing
 ---
 
-#### BasicPostProcessing.m
+#### BrightnessPostprocessing.m
 
-Uses results of `AnalyzedData.mat` to create 3 figures for each data set:
+Defines the function brightnessPostProcessing(dataset) create 3 figures for each data set:
 1. Plot of average brightness vs. time
 2. Plot of average G<sup>2</sup> vs. time
 3. Previous two plots overlayed (and normalized)

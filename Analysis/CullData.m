@@ -45,8 +45,8 @@ for i=1: length(trials)
            %plot(xy(:,1),xy(:,2),'LineWidth',5,'Color','green');
 
            % Plot beginnings and ends of lines
-           %plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
-           %plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+           plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+           plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
            
            len = norm(lines(k).point1 - lines(k).point2);
            if len > maxLength
@@ -55,7 +55,7 @@ for i=1: length(trials)
            end
        end
        
-       plot(longestLine(:,1), longestLine(:,2), 'LineWidth', 5, 'Color','green');
+       %plot(longestLine(:,1), longestLine(:,2), 'LineWidth', 5, 'Color','green');
 
        pause(.01)
        %break;

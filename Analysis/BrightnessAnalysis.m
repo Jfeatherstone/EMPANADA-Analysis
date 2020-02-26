@@ -1,21 +1,49 @@
+
+function trials = BrightnessAnalysis(startupFile, matFileContainingTrials)
+
+
+% In case data is not provided, we default to the output of LoadFiles.m
+if ~exist('matFileContainingTrials', 'var')
+   matFileContainingTrials = 'Preprocessing/LoadFiles.mat';
+   fprintf('Warning: file list not provided, defaulting to %s\n', matFileContainingTrials);
+end
+
+% In case the startup file is not provided, default to my laptop
+if ~exist('startupFile', 'var')
+    fprintf('Warning: startup file not specified, defaulting to laptop (startup_laptop.m)\n')
+    run Misc/startup_laptop.m
+else
+   run(['Misc/', startupFile])
+end
+
+disp(settings.datapath)
+
+% Make sure that the startup file has been run
+% This shouldn't ever error since we just checked, but I have it here just
+% in case something wack happens
+if ~exist('settings', 'var')
+   fprintf('Error: startup program has not been run, datapath not defined!\n') 
+   return
+end
+
 % Most of the code here is taken from BrightnessGSquaredAnalysis.m and the
 % purpose is just to separate the two methods, since G Squared takes much
 % longer to run
 
 % Load the video files and trial information from another file
 % This yields the following variable(s): trials
-load('Preprocessing/LoadFiles.mat')
+load(matFileContainingTrials, 'trials')
 
 % Empty array of structs that we will store results to
 % We don't actually need this array anymore, but we will create structs
 % that have the same form below
-%results = struct('averageBrightness', {}, 'frameTime', {}, 'averageGSquared', {});
+%results = struct('frameTime', frameTime, 'averageBrightness', averageBrightness, 'averageBrightnessDerivative', brightnessDerivative);
 
 for i=1: length(trials)
     
     fprintf('Currently processing trial %i of %i:\n', i, length(trials));
     currentVideo = VideoReader([settings.datapath, trials(i).fileName]);
-        
+    
     frameTimeDifference = 1 / currentVideo.FrameRate;
     
     % We shouldn't have any issues since this value that is being casted to
@@ -77,3 +105,5 @@ for i=1: length(trials)
     fprintf('...Processing complete!\n')
 
 end
+
+end % Function end
