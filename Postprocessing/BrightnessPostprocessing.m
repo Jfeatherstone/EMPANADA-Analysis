@@ -133,13 +133,13 @@ for i=1: length(trials)
     %set(gca,'yticklabel',[]);
     % Make the graph not pop up (since we'll be saving it to a file
     set(gcf,'visible','off')
-
+    
     % Now save the figure
     saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-BrightnessDerivativeSquared'];
     % This is a custom figure saving method, see file for more info
     % (printfig.m)
     printfig(3*i + 2, saveFileNameNoExtension);
-        
+    
     hold off
 end
 
