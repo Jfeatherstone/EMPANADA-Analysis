@@ -1,4 +1,4 @@
-function trials = LoadFiles(startupFile)
+function trials = LoadFiles(startupFile, cropData)
 
 % In case the startup file is not provided, default to my laptop
 if ~exist('startupFile', 'var')
@@ -27,6 +27,13 @@ if ~strcmp(pwd, strcat(settings.matlabpath, 'Preprocessing'))
    outputPath = [settings.matlabpath, 'Preprocessing/LoadFiles.mat'];
 end
 
+% We also want to make sure that our excel file specifying the crop times
+% for each video is there
+if ~isfile('EMPANADA Data Files Key.xlsx') && cropData
+    fprintf('Error: data key file is not present in MATLAB directory!\n')
+    return
+end
+
 % This files loads in all of the videos, as well as parses some info from their file names.
 % I have renamed files so that they looks as follows:
 % Day<1|2>-<Martian|Lunar|Micro>-<Speed>mms[-<repetition #>].mov
@@ -41,7 +48,7 @@ end
 fileList = dir(settings.datapath);
 
 % An empty array of the type of struct we will be using later
-trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'results', {});
+trials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 
 % Which file we want to start at
 % This is useful if we only want to look at a single trial for testing
@@ -52,8 +59,13 @@ start = 1;
 % find bad files
 offset = start - 1;
 
+% Load in the excel file to read crop times
+dataKeyExcel = readtable('EMPANADA Data Files Key.xlsx');
+startTimes = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,6)));
+endTimes = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,7)));
+
 %for i = 1: length(fileList);
-for i = start: length(fileList) % For now we only want to look at a one trial to test the code
+for i = start: length(fileList)
     
     % First we want to do some checks to make sure that invalid files don't
     % get processed
@@ -99,6 +111,9 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     % Grab the speed and take everything but the last 3 characters (mms)
     speed = char(nameFields(3));
     speed = speed(1:end-3);
+        
+    % Now we grab the start and end times
+    cropTimes = [str2num(startTimes(fileList(i).name)), str2num(endTimes(fileList(i).name))];
     
     % There may or may not be a fourth entry in name fields, if we have
     % multiple trials that have the same parameters, but this doesn't
@@ -110,7 +125,7 @@ for i = start: length(fileList) % For now we only want to look at a one trial to
     fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset)
         
     % Add this trial into our array
-    trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'results', 'N/A');
+    trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'cropTimes', cropTimes, 'results', 'N/A');
 end
 
 save(outputPath, 'trials');
