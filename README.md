@@ -4,23 +4,62 @@
 
 Below is a list of all of the files contained in this repo, including what they do (or attempt to do) and what methods they use.
 
+(Last updated 3-3-2020, so there may be changes to below, though I will try and update this whenever I can)
+
 ---
-### Preprocessing
+### Preprocessing/
 
 #### LoadFiles.m
 
-This file organizes the data files based on their file name and loads them into a struct called trials. This struct includes information about the experiment parameters (speed, day, gravity), the full path of the file (might change soon), and an empty spot to put the analysis results later on.
+This file organizes the data files based on their file name and loads them into a struct called trials. This struct includes information about the experiment parameters (speed, day, gravity, crop times, validity of data), the name of the file, and an empty spot to put the analysis results later on.
 
-The script assumes that all files are named using the convention `Day<#>-<Gravity>-<speed>mms.mkv` and that they are located in the directory defined by either of the startup files (see Misc section)
+The script assumes that all files are named using the convention `Day<#>-<Gravity>-<speed>mms.mkv` and that they are located in the directory defined by the startup file `startup.m`
+
+Some other notes about this file:
+- The spreadsheet located in the root directory contains several pieces of information about each trial that is read in during this preprocessing:
+    - There is no reason to analyze the entire video, when we are really only interested in what happens as the probe descends. Because of this, I have marked when the probe descent begins and when it ends for each video, which is later used to limit the analysis to this subclip. This process of identifying when the probe is moving is done qualitatively right now ie. I just watch each video, but could be automated later on.
+    - Some of the videos (especially micro gravity trials) have some very questionable gravity, and therefore have been marked as such and are ignored in this preprocessing. This includes any videos where several particles touch the top of the enclosure. These issues were caused by an unstable parabolic flight and/or turbulence.
 
 ---
-### Analysis
+### Analysis/
 
-#### Brightness_GSquared_Analysis.m
+#### BrightnessAnalysis.m
 
-This is currently the only analysis file that I have been using, and it calculates the average brightness for each frame of each movie, as well as the average G<sup>2</sup> value for each frame. The former is as simple as it sounds, while more information on the later can be found in reference (1) (code can be found there as well).
+##### Returned fields:
+- `frameTime`
+    - The time of each data point
+- `averageBrightness`
+    - The average brightness of the entire frame
+- `averageBrightnessDerivative`
+    - The derivative of the average brightness calculated using the central difference stencil (and forward/backward stencil for first/last points)
 
-This takes in the `trials` struct that is created in `LoadFiles.m` and outputs the same struct to `AnalyzedData.mat` with the results appended as a field.
+This analysis principally looks at the average brightness for each frame of each video. This analysis takes a very short amount of time, about 3 minutes for 25 trials as of now (on my laptop, GTX 1060, i7-8750H).
+
+#### GSquaredAnalysis.m
+
+##### Returned fields:
+- `frameTime`
+    - The time of each data point
+- `averageGSquared`
+    - The average G<sup>2</sup> value for each frame
+
+This analysis looks at the gradient of the brightness for each frame, calculated using the G<sup>2</sup> method outlined in reference 1. This analysis takes a very long period of time, about 6 days for 26 trials (on onyx).
+
+#### LocalizedBrightnessAnalysis.m
+
+##### Returned fields:
+- `frameTime`
+    - The time of each data point
+- `averageRowBrightness`
+    - The average brightness per row of each frame
+- `averageRowBrightnessDerivative`
+    - The derivative of the average brightness per row of each frame calculated using the central difference stencil (and forward/backward stencil for first/last points)
+- `averageColumnBrightness`
+    - The average brightness per column of each frame
+- `averageColumnBrightnessDerivative`
+    - The derivative of the average brightness per column of each frame calculated using the central difference stencil (and forward/backward stencil for first/last points)
+
+This analysis gives more information about where the brightness is changing through the insertion of the probe, and is currently being used to calculate and 'area of effect' of the probe as a function of speed and gravity.
 
 ---
 ### Postprocessing
