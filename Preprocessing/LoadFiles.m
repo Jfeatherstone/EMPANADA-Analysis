@@ -53,6 +53,7 @@ offset = start - 1;
 dataKeyExcel = readtable('EMPANADA Data Files Key.xlsx');
 startTimes = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,6)));
 endTimes = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,7)));
+questionable = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,8)));
 
 %for i = 1: length(fileList);
 for i = start: length(fileList)
@@ -62,7 +63,7 @@ for i = start: length(fileList)
     
     % Check if it is a directory
     if fileList(i).isdir == 1
-        fprintf('Invalid file: "%s": is a directory (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset)
+        fprintf('Invalid file: "%s": is a directory (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset);
         offset = offset + 1;
         continue
     end
@@ -70,14 +71,21 @@ for i = start: length(fileList)
     % Make sure the size of the file is non-zero
     % This eliminates '.' and '..' which always show up
     if fileList(i).bytes == 0
-        fprintf('Invalid file: "%s": has size of 0 bytes (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset)
+        fprintf('Invalid file: "%s": has size of 0 bytes (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset);
         offset = offset + 1;
         continue
     end
     
     % Make sure we have a .mov extension
     if ~strcmp(fileList(i).name(end-3:end), '.mov')
-        fprintf('Invalid file: "%s": has incorrect extension (correct=.mov) (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset)
+        fprintf('Invalid file: "%s": has incorrect extension (correct=.mov) (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset);
+        offset = offset + 1;
+        continue
+    end
+    
+    % If the data has been marked as questionable, we ignore it
+    if strcmp(questionable(fileList(i).name), 'Yes')
+        fprintf('Invalid file: "%s": has been marked as questionable (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset);
         offset = offset + 1;
         continue
     end
@@ -103,7 +111,9 @@ for i = start: length(fileList)
     speed = speed(1:end-3);
         
     % Now we grab the start and end times
-    cropTimes = [str2double(startTimes(fileList(i).name)), str2double(endTimes(fileList(i).name))];
+    % These cells are formatted as numbers in the sheet, so we don't have
+    % to do any conversions
+    cropTimes = [startTimes(fileList(i).name), endTimes(fileList(i).name)];
     
     % There may or may not be a fourth entry in name fields, if we have
     % multiple trials that have the same parameters, but this doesn't
@@ -112,7 +122,7 @@ for i = start: length(fileList)
     
     fileName = fileList(i).name;
     % Even throw a debug message in there
-    fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset)
+    fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset);
         
     % Add this trial into our array
     trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'cropTimes', cropTimes, 'results', 'N/A');

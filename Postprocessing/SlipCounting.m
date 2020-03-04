@@ -76,7 +76,7 @@ startup;
 % to find similar values should be looked into
 lunarMinPeakHeight = 100;
 martianMinPeakHeight = 100;
-microMinPeakHeight = 10;
+microMinPeakHeight = 5;
 minPeakDistance = 1;
 
 lunarNumPeaks = zeros(1, length(lunarGravityTrials));
@@ -182,10 +182,10 @@ figure(3);
 plot(microSpeeds, microNumPeaks, '*');
 xlabel('Probe speed [mm/s]');
 ylabel('# of slipping events');
-title('Slipping events vs. probe speed (micro)');
+title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
 xlim([0, 240]);
 ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
-saveFileNameNoExtension = 'Micro-SlipCounting';
+saveFileNameNoExtension = ['Micro-SlipCounting-', num2str(microMinPeakHeight)];
 printfig(3, saveFileNameNoExtension);
 
 
