@@ -1,22 +1,12 @@
-function trials = LoadFiles(startupFile, cropData)
-
-% In case the startup file is not provided, default to my laptop
-if ~exist('startupFile', 'var')
-    fprintf('Warning: startup file not specified, defaulting to laptop (StartupLaptop.m)!\n')
-    StartupLaptop()
-else
-   	run(startupFile)
-end
-% And allow the variable settings to be accessed
-global settings
+function trials = LoadFiles(cropData)
 
 % Make sure that the startup file has been run
-% This shouldn't ever error since we just checked, but I have it here just
-% in case something wack happens
 if ~exist('settings', 'var')
-   fprintf('Error: startup program has not been run, datapath not defined!\n') 
-   return
+   fprintf('Warning: startup program has not been run, correcting now...\n')
+   startup;
+   fprintf('Startup file run successfully!\n');
 end
+global settings
 
 % We also want to make sure that the output file is always saved inside the
 % Analysis folder, so if we are running the function from elsewhere, we
@@ -113,7 +103,7 @@ for i = start: length(fileList)
     speed = speed(1:end-3);
         
     % Now we grab the start and end times
-    cropTimes = [str2num(startTimes(fileList(i).name)), str2num(endTimes(fileList(i).name))];
+    cropTimes = [str2double(startTimes(fileList(i).name)), str2double(endTimes(fileList(i).name))];
     
     % There may or may not be a fourth entry in name fields, if we have
     % multiple trials that have the same parameters, but this doesn't

@@ -1,5 +1,5 @@
 
-function trials = BrightnessAnalysis(startupFile, matFileContainingTrials)
+function trials = BrightnessAnalysis(matFileContainingTrials)
 % Most of the code here is taken from BrightnessGSquaredAnalysis.m and the
 % purpose is just to separate the two methods, since G Squared takes much
 % longer to run
@@ -10,23 +10,13 @@ if ~exist('matFileContainingTrials', 'var')
    fprintf('Warning: file list not provided, defaulting to %s!\n', matFileContainingTrials);
 end
 
-% In case the startup file is not provided, default to my laptop
-if ~exist('startupFile', 'var')
-    fprintf('Warning: startup file not specified, defaulting to laptop (StartupLaptop.m)!\n')
-    StartupLaptop()
-else
-   	run(startupFile)
-end
-% And allow the variable settings to be accessed
-global settings
-
 % Make sure that the startup file has been run
-% This shouldn't ever error since we just checked, but I have it here just
-% in case something wack happens
 if ~exist('settings', 'var')
-   fprintf('Error: startup program has not been run, datapath not defined!\n') 
-   return
+   fprintf('Warning: startup program has not been run, correcting now...\n')
+   startup;
+   fprintf('Startup file run successfully!\n');
 end
+global settings
 
 % We also want to make sure that the output file is always saved inside the
 % Analysis folder, so if we are running the function from elsewhere, we
@@ -52,10 +42,18 @@ for i=1: length(trials)
     
     frameTimeDifference = 1 / currentVideo.FrameRate;
     
+    % We want to start at the proper time specified by cropTimes in the
+    % array, so we find the closest multiple of our frame rate
+    croppedStartTime = trials(i).cropTimes(1) - mod(trials(i).cropTimes(1), frameTimeDifference);
+    currentVideo.CurrentTime = croppedStartTime;
+    % Same process for the end time
+    croppedEndTime = trials(i).cropTimes(2) - mod(trials(i).cropTimes(2), frameTimeDifference);
+    % Now we find the total number of frames between
     % We shouldn't have any issues since this value that is being casted to
-    % an int should always be exact eg. 1320.0000000000 since these values
+    % an int should always be exact eg. 1320.000000 since these values
     % should be complementary
-    numFrames = int32(currentVideo.Duration / frameTimeDifference);
+    numFrames = int32((croppedEndTime - currentVideo.CurrentTime) / frameTimeDifference);
+    
     frameTime = zeros(1, numFrames);
     averageBrightness = zeros(1, numFrames);
 
@@ -72,8 +70,9 @@ for i=1: length(trials)
         % doesn't seem necessary yet, so I will leave that out here
         currentFrame = readFrame(currentVideo);
         
-        frameTime(currentFrameNumber) = currentVideo.CurrentTime;
-                
+        % And make sure to subtract out the start time
+        frameTime(currentFrameNumber) = currentVideo.CurrentTime - croppedStartTime;
+        
         % Converting the frame to gray-scale yields better results
         currentFrameGrayScale = rgb2gray(currentFrame);
         
@@ -81,6 +80,9 @@ for i=1: length(trials)
         averageBrightness(currentFrameNumber) = mean2(currentFrameGrayScale);
  
         currentFrameNumber = currentFrameNumber + 1;
+        if currentFrameNumber > numFrames
+            break
+        end
     end
     
     % Now calculate the derivative of the brightness

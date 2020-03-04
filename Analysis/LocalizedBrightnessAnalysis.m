@@ -1,5 +1,5 @@
 
-function trials = LocalizedBrightnessAnalysis(startupFile, matFileContainingTrials)
+function trials = LocalizedBrightnessAnalysis(matFileContainingTrials)
 % This file finds the average derivative of brightness for each column and
 % each row of the image file, so we can determine an area of effect of the
 % probe
@@ -10,23 +10,13 @@ if ~exist('matFileContainingTrials', 'var')
    fprintf('Warning: file list not provided, defaulting to %s!\n', matFileContainingTrials);
 end
 
-% In case the startup file is not provided, default to my laptop
-if ~exist('startupFile', 'var')
-    fprintf('Warning: startup file not specified, defaulting to laptop (StartupLaptop.m)!\n')
-    StartupLaptop()
-else
-   	run(startupFile)
-end
-% And allow the variable settings to be accessed
-global settings
-
 % Make sure that the startup file has been run
-% This shouldn't ever error since we just checked, but I have it here just
-% in case something wack happens
 if ~exist('settings', 'var')
-   fprintf('Error: startup program has not been run, datapath not defined!\n') 
-   return
+   fprintf('Warning: startup program has not been run, correcting now...\n')
+   startup;
+   fprintf('Startup file run successfully!\n');
 end
+global settings
 
 % We also want to make sure that the output file is always saved inside the
 % Analysis folder, so if we are running the function from elsewhere, we

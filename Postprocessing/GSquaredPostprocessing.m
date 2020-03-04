@@ -19,23 +19,13 @@ for i=1: length(requiredFields)
    end
 end
 
-% In case the startup file is not provided, default to my laptop
-if ~exist('startupFile', 'var')
-    fprintf('Warning: startup file not specified, defaulting to laptop (StartupLaptop)!\n')
-    startupFile = 'StartupLaptop';
-end
-run(startupFile)
-
-% And allow the variable settings to be accessed
-global settings
-
 % Make sure that the startup file has been run
-% This shouldn't ever error since we just checked, but I have it here just
-% in case something wack happens
 if ~exist('settings', 'var')
-   fprintf('Error: startup program has not been run, datapath not defined!\n') 
-   return
+   fprintf('Warning: startup program has not been run, correcting now...\n')
+   startup;
+   fprintf('Startup file run successfully!\n');
 end
+global settings
 
 % Set our figure sizes
 figureWidth = 720;
