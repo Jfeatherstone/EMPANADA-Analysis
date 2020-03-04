@@ -127,11 +127,16 @@ For a quick and dirty version of this see `RealTimeTrackingShow.m`. As expected,
 
 A script created to easily save figures to files in their specified folders as defined in the proper startup file.
 
+---
 ### Other
 
 #### `startup.m`
 
 Defines custom font sizes and other variables that have to do with how figures look. Also defines the data path, and automatically detects whether Matlab is being run on my personal laptop or on one of the lab machines.
+
+#### `EMPANADA Data Files Key.xlsx`
+
+Excel sheet containing information about each trial, which is read in during preprocessing. For more information, see `LoadFiles.m`.
 
 ## References
 
