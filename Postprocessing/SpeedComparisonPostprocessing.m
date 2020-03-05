@@ -1,4 +1,4 @@
-function SpeedComparisonPostprocessing(startupFile, matFileContainingTrials)
+function SpeedComparisonPostprocessing(matFileContainingTrials)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
@@ -33,7 +33,7 @@ figureHeight = 480;
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
 settings.charfrac = .7;
-run(startupFile);
+startup;
 
 % We want to sort each trial into it's gravity
 % These are the same structs from LoadFiles.m

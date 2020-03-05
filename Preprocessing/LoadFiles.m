@@ -101,7 +101,7 @@ for i = start: length(fileList)
 
     % Grab the day and take only the last character
     day = char(nameFields(1));
-    day = day(end:end);
+    day = str2double(day(end:end));
     
     % Don't need to do any editing here
     gravity = nameFields(2);

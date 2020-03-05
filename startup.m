@@ -52,7 +52,25 @@ set(0,'DefaultUIControlFontSize',settings.fontsize)
 set(0,'DefaultLineLineWidth', settings.linewidth)
 set(0,'DefaultAxesLineWidth', settings.linewidth)
 
+% Now we want to define set colors for each gravity so we can be consistent
+% across any figures that involve multiple gravities
+settings.colors = containers.Map('KeyType', 'char', 'ValueType', 'char');
+
+% Matlab default purple
+settings.colors('Lunar') = '#7E2F8E';
+% Reynolds Red
+settings.colors('Martian') = '#990000';
+% Dark gray
+settings.colors('Micro') = '#989898';
+
+% And we'll have different symbols for each day
+settings.pointSymbols = containers.Map('KeyType', 'double', 'ValueType', 'char');
+
+settings.pointSymbols(1) = '^';
+settings.pointSymbols(2) = '+';
+
 % work in your matlab directory by default
 cd(settings.matlabpath)
+
 
 clear c hostname result username

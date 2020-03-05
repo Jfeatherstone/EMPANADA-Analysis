@@ -121,7 +121,7 @@ For a quick and dirty version of this see `RealTimeTrackingShow.m`. As expected,
 3. Comparison of number of slipping events for micro gravity
 
 ---
-### Misc/
+### `Misc/`
 
 #### `printfig.m`
 
@@ -138,6 +138,11 @@ Defines custom font sizes and other variables that have to do with how figures l
 
 Excel sheet containing information about each trial, which is read in during preprocessing. For more information, see `LoadFiles.m`.
 
+#### `renaming_script.py`
+
+Python script used to rename all of the videos from their raw names, which only include date information, to their new names, which includes trial specific information.
+
+---
 ## References
 
 1. Karen E. Daniels, Jonathan E. Kollmer and James G. Puckett. “Photoelastic force measurements in granular materials.” Review of Scientific Instruments 88, 051808 (2017)

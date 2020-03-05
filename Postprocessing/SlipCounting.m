@@ -81,10 +81,13 @@ minPeakDistance = 1;
 
 lunarNumPeaks = zeros(1, length(lunarGravityTrials));
 lunarSpeeds = zeros(1, length(lunarGravityTrials));
+lunarDays = zeros(1, length(lunarGravityTrials));
 
 martianNumPeaks = zeros(1, length(martianGravityTrials));
 martianSpeeds = zeros(1, length(martianGravityTrials));
+martianDays = zeros(1, length(martianGravityTrials));
 
+% We don't need to record the days for micro as they are all from day 1
 microNumPeaks = zeros(1, length(microGravityTrials));
 microSpeeds = zeros(1, length(microGravityTrials));
 
@@ -93,6 +96,7 @@ for i=1: length(lunarGravityTrials)
    data = lunarGravityTrials(i).results.averageBrightnessDerivative.^2;
    lunarNumPeaks(i) = length(findpeaks(data, lunarGravityTrials(i).results.frameTime, 'MinPeakHeight', lunarMinPeakHeight, 'MinPeakDistance', minPeakDistance));
    lunarSpeeds(i) = lunarGravityTrials(i).speed;
+   lunarDays(i) = lunarGravityTrials(i).day;
 end
 
 for i=1: length(martianGravityTrials)
@@ -100,6 +104,7 @@ for i=1: length(martianGravityTrials)
    data = martianGravityTrials(i).results.averageBrightnessDerivative.^2;
    martianNumPeaks(i) = length(findpeaks(data, martianGravityTrials(i).results.frameTime, 'MinPeakHeight', martianMinPeakHeight, 'MinPeakDistance', minPeakDistance));
    martianSpeeds(i) = martianGravityTrials(i).speed;
+   martianDays(i) = martianGravityTrials(i).day;
 end
 
 for i=1: length(microGravityTrials)
@@ -109,85 +114,98 @@ for i=1: length(microGravityTrials)
    microSpeeds(i) = microGravityTrials(i).speed;
 end
 
-% % Now we sort points into their respective speed categories so that we can
-% % take averages
-% lunarSpeedKeysKeys = [];
-% lunarPeaksBySpeed = [];
-% foundKeys = 1;
-% for i=1: length(lunarGravityTrials)
-%     if ismember(lunarGravityTrials(i).speed, lunarSpeedKeysKeys)
-%         continue
-%     end
-%     lunarPeaksBySpeed(foundKeys) = [lunarNumPeaks(lunarSpeeds == lunarGravityTrials(i).speed)];
-%     lunarSpeedKeys(foundKeys) = lunarGravityTrials(i).speed;
-%     foundKeys = foundKeys + 1;
-% end
-% 
-% martianSpeedKeys = [];
-% martianPeaksBySpeed = [];
-% foundKeys = 1;
-% for i=1: length(martianGravityTrials)
-%     if ismember(martianGravityTrials(i).speed, martianSpeedKeys)
-%         continue
-%     end
-%     martianPeaksBySpeed(foundKeys) = [martianNumPeaks(martianSpeeds == martianGravityTrials(i).speed)];
-%     martianSpeedKeys(foundKeys) = martianGravityTrials(i).speed;
-%     foundKeys = foundKeys + 1;
-% end
-% 
-% disp(martianSpeedKeys)
-% 
-% microSpeedKeys = zeros(1, 1);
-% microPeaksBySpeed = zeros(1, 1);
-% 
-% microMap = containers.Map('KeyType', 'double', 'ValueType', 'double');
-% 
-% foundKeys = 1;
-% for i=1: length(microGravityTrials)
-%     if ismember(microGravityTrials(i).speed, microSpeedKeys)
-%         continue
-%     end
-%     disp(class(microNumPeaks(microSpeeds == microGravityTrials(i).speed)));
-%     microMap(microGravityTrials(i).speed) = microNumPeaks(microSpeeds == microGravityTrials(i).speed);
-%     %microPeaksBySpeed(foundKeys) = microNumPeaks(microSpeeds == microGravityTrials(i).speed);
-%     %microSpeedKeys(foundKeys) = microGravityTrials(i).speed;
-%     %foundKeys = foundKeys + 1;
-% end
-% 
-% 
-% disp(microMap)
+% Now we sort points into their respective speed categories so that we can
+% take averages
+
+% I am using maps for this part because Matlab really doesn't like it when
+% you try and assign an array as an element of an array
+% ie. doing arr(1) = [1, 2, 3] won't work because Matlab tries to assign
+% each element on the right to a *single* position on the left, but we only
+% provided one index, so it freaks out
+% Using these means we have to convert to arrays later using cell2mat, but
+% it works...
+
+lunarAveragePeaksBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+lunarErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(lunarGravityTrials)
+    lunarAveragePeaksBySpeed(lunarGravityTrials(i).speed) = mean(lunarNumPeaks(lunarSpeeds == lunarGravityTrials(i).speed));
+    lunarErrorBarsBySpeed(lunarGravityTrials(i).speed) = std(lunarNumPeaks(lunarSpeeds == lunarGravityTrials(i).speed));
+end
+
+martianAveragePeaksBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+martianErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(martianGravityTrials)
+    martianAveragePeaksBySpeed(martianGravityTrials(i).speed) = mean(martianNumPeaks(martianSpeeds == martianGravityTrials(i).speed));
+    martianErrorBarsBySpeed(martianGravityTrials(i).speed) = std(martianNumPeaks(martianSpeeds == martianGravityTrials(i).speed));
+end
+
+microAveragePeaksBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+microErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(microGravityTrials)
+    microAveragePeaksBySpeed(microGravityTrials(i).speed) = mean(microNumPeaks(microSpeeds == microGravityTrials(i).speed));
+    microErrorBarsBySpeed(microGravityTrials(i).speed) = std(microNumPeaks(microSpeeds == microGravityTrials(i).speed));
+end
 
 % Now plot stuff
 figure(1);
-plot(lunarSpeeds, lunarNumPeaks, '*');
+hold on;
+for i=1: 2
+    plot(lunarSpeeds(lunarDays == i), lunarNumPeaks(lunarDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Lunar'), 'DisplayName', ['Day', num2str(i)])
+end
+%plot(lunarSpeeds, lunarNumPeaks, '*');
 xlabel('Probe speed [mm/s]');
 ylabel('# of slipping events');
 title('Slipping events vs. probe speed (Lunar)');
-xlim([0, 240]);
+xlim([50, 240]);
 ylim([max(min(lunarNumPeaks-1), 0), max(lunarNumPeaks)+1]);
+legend()
 saveFileNameNoExtension = 'Lunar-SlipCounting';
 printfig(1, saveFileNameNoExtension);
- 
+
 figure(2);
-plot(martianSpeeds, martianNumPeaks, '*');
+hold on;
+for i=1: 2
+    plot(martianSpeeds(martianDays == i), martianNumPeaks(martianDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Martian'), 'DisplayName', ['Day', num2str(i)])
+end
 xlabel('Probe speed [mm/s]');
 ylabel('# of slipping events');
 title('Slipping events vs. probe speed (Martian)');
-xlim([0, 240]);
+xlim([50, 240]);
 ylim([max(min(martianNumPeaks-1), 0), max(martianNumPeaks)+1]);
+legend()
 saveFileNameNoExtension = 'Martian-SlipCounting';
 printfig(2, saveFileNameNoExtension);
 
 figure(3);
-plot(microSpeeds, microNumPeaks, '*');
+%hold on;
+%plot(microSpeeds, microNumPeaks, '*');
+errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'DisplayName', 'Day 1');
 xlabel('Probe speed [mm/s]');
 ylabel('# of slipping events');
-title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
-xlim([0, 240]);
+%title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
+title('Slipping events vs. probe speed (micro)');
+xlim([50, 240]);
 ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
-saveFileNameNoExtension = ['Micro-SlipCounting-', num2str(microMinPeakHeight)];
+legend()
+%saveFileNameNoExtension = ['Micro-SlipCounting-', num2str(microMinPeakHeight)];
+saveFileNameNoExtension = 'Micro-SlipCounting';
 printfig(3, saveFileNameNoExtension);
 
+% Now lets plot everything on the same figure.
+figure(4);
+hold on;
+errorbar(cell2mat(lunarAveragePeaksBySpeed.keys), cell2mat(lunarAveragePeaksBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'DisplayName', 'Lunar');
+errorbar(cell2mat(martianAveragePeaksBySpeed.keys), cell2mat(martianAveragePeaksBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'DisplayName', 'Martian');
+errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'DisplayName', 'Micro');
+xlabel('Probe speed [mm/s]');
+ylabel('# of slipping events');
+%title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
+title('Slipping events vs. probe speed');
+xlim([50, 240]);
+%ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
+legend()
+saveFileNameNoExtension = 'All-SlipCounting';
+printfig(3, saveFileNameNoExtension);
 
 end
 
