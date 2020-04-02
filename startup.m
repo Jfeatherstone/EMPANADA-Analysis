@@ -61,7 +61,8 @@ settings.colors('Lunar') = '#7E2F8E';
 % Reynolds Red
 settings.colors('Martian') = '#990000';
 % Dark gray
-settings.colors('Micro') = '#989898';
+%settings.colors('Micro') = '#989898';
+settings.colors('Micro') = '#424242';
 
 % And we'll have different symbols for each day
 settings.pointSymbols = containers.Map('KeyType', 'double', 'ValueType', 'char');
