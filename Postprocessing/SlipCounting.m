@@ -69,7 +69,7 @@ figureWidth = 720;
 figureHeight = 480;
 
 % Adjust the font to be a little smaller, and rerun our startup
-settings.charfrac = .7;
+settings.charfrac = .55;
 startup;
 
 % These values are chosen by just looking at the data, a more precise way
@@ -194,18 +194,18 @@ printfig(3, saveFileNameNoExtension);
 % Now lets plot everything on the same figure.
 figure(4);
 hold on;
-errorbar(cell2mat(lunarAveragePeaksBySpeed.keys), cell2mat(lunarAveragePeaksBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'DisplayName', 'Lunar');
-errorbar(cell2mat(martianAveragePeaksBySpeed.keys), cell2mat(martianAveragePeaksBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'DisplayName', 'Martian');
-errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'DisplayName', 'Micro');
+errorbar(cell2mat(lunarAveragePeaksBySpeed.keys), cell2mat(lunarAveragePeaksBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
+errorbar(cell2mat(martianAveragePeaksBySpeed.keys), cell2mat(martianAveragePeaksBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
+errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
 xlabel('Probe speed [mm/s]');
 ylabel('# of slipping events');
 %title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
-title('Slipping events vs. probe speed');
+title('Slipping events vs. Probe speed for Various Gravities');
 xlim([50, 240]);
 %ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
 legend()
 saveFileNameNoExtension = 'All-SlipCounting';
-printfig(3, saveFileNameNoExtension);
+printfig(4, saveFileNameNoExtension);
 
 end
 

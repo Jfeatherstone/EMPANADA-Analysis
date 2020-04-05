@@ -57,9 +57,8 @@ set(0,'DefaultAxesLineWidth', settings.linewidth)
 settings.colors = containers.Map('KeyType', 'char', 'ValueType', 'char');
 
 % Matlab default purple
-settings.colors('Lunar') = '#7E2F8E';
-% Reynolds Red
-settings.colors('Martian') = '#990000';
+settings.colors('Lunar') = '#32ab32';
+settings.colors('Martian') = '#cc0000';
 % Dark gray
 %settings.colors('Micro') = '#989898';
 settings.colors('Micro') = '#424242';
