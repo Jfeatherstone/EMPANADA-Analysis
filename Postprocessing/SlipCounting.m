@@ -63,10 +63,8 @@ martianGravityTrials = martianGravityTrials(index);
 [~, index] = sort([microGravityTrials.speed], 'ascend');
 microGravityTrials = microGravityTrials(index);
 
-
-% Set our figure sizes
-figureWidth = 720;
-figureHeight = 480;
+figureWidth = 540;
+figureHeight = 400;
 
 % Adjust the font to be a little smaller, and rerun our startup
 settings.charfrac = .55;
@@ -148,6 +146,7 @@ end
 
 % Now plot stuff
 figure(1);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
 for i=1: 2
     plot(lunarSpeeds(lunarDays == i), lunarNumPeaks(lunarDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Lunar'), 'DisplayName', ['Day', num2str(i)])
@@ -163,6 +162,7 @@ saveFileNameNoExtension = 'Lunar-SlipCounting';
 printfig(1, saveFileNameNoExtension);
 
 figure(2);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
 for i=1: 2
     plot(martianSpeeds(martianDays == i), martianNumPeaks(martianDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Martian'), 'DisplayName', ['Day', num2str(i)])
@@ -177,6 +177,7 @@ saveFileNameNoExtension = 'Martian-SlipCounting';
 printfig(2, saveFileNameNoExtension);
 
 figure(3);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 %hold on;
 %plot(microSpeeds, microNumPeaks, '*');
 errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'DisplayName', 'Day 1');
@@ -194,6 +195,7 @@ printfig(3, saveFileNameNoExtension);
 % Now lets plot everything on the same figure.
 figure(4);
 hold on;
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 errorbar(cell2mat(lunarAveragePeaksBySpeed.keys), cell2mat(lunarAveragePeaksBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
 errorbar(cell2mat(martianAveragePeaksBySpeed.keys), cell2mat(martianAveragePeaksBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
 errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');

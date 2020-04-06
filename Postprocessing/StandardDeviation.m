@@ -87,21 +87,83 @@ end
 [~, index] = sort([microGravityTrials.speed], 'ascend');
 microGravityTrials = microGravityTrials(index);
 
+
+lunarSTDs = zeros(1, length(lunarGravityTrials));
+lunarSpeeds = zeros(1, length(lunarGravityTrials));
+lunarDays = zeros(1, length(lunarGravityTrials));
+
+martianSTDs = zeros(1, length(martianGravityTrials));
+martianSpeeds = zeros(1, length(martianGravityTrials));
+martianDays = zeros(1, length(martianGravityTrials));
+
+% We don't need to record the days for micro as they are all from day 1
+microSTDs = zeros(1, length(microGravityTrials));
+microSpeeds = zeros(1, length(microGravityTrials));
+
+for i=1: length(lunarGravityTrials)
+   lunarSTDs(i) = std(lunarGravityTrials(i).results.averageBrightness);
+   lunarSpeeds(i) = lunarGravityTrials(i).speed;
+   lunarDays(i) = lunarGravityTrials(i).day;
+end
+
+for i=1: length(martianGravityTrials)
+   martianSTDs(i) = std(martianGravityTrials(i).results.averageBrightness);
+   martianSpeeds(i) = martianGravityTrials(i).speed;
+   martianDays(i) = martianGravityTrials(i).day;
+end
+
+for i=1: length(microGravityTrials)
+   microSTDs(i) = std(microGravityTrials(i).results.averageBrightness);
+   microSpeeds(i) = microGravityTrials(i).speed;
+end
+% Now we sort points into their respective speed categories so that we can
+% take averages
+
+% I am using maps for this pSTDart because Matlab really doesn't like it when
+% you try and assign an array as an element of an array
+% ie. doing arr(1) = [1, 2, 3] won't work because Matlab tries to assign
+% each element on the right to a *single* position on the left, but we only
+% provided one index, so it freaks out
+% Using these means we have to convert to arrays later using cell2mat, but
+% it works...
+
+lunarAverageSTDBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+lunarErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(lunarGravityTrials)
+    lunarAverageSTDBySpeed(lunarGravityTrials(i).speed) = mean(lunarSTDs(lunarSpeeds == lunarGravityTrials(i).speed));
+    lunarErrorBarsBySpeed(lunarGravityTrials(i).speed) = std(lunarSTDs(lunarSpeeds == lunarGravityTrials(i).speed));
+end
+
+martianAverageSTDBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+martianErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(martianGravityTrials)
+    martianAverageSTDBySpeed(martianGravityTrials(i).speed) = mean(martianSTDs(martianSpeeds == martianGravityTrials(i).speed));
+    martianErrorBarsBySpeed(martianGravityTrials(i).speed) = std(martianSTDs(martianSpeeds == martianGravityTrials(i).speed));
+end
+
+microAverageSTDBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+microErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(microGravityTrials)
+    microAverageSTDBySpeed(microGravityTrials(i).speed) = mean(microSTDs(microSpeeds == microGravityTrials(i).speed));
+    microErrorBarsBySpeed(microGravityTrials(i).speed) = std(microSTDs(microSpeeds == microGravityTrials(i).speed));
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         LUNAR
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Now plot stuff
+figure(1);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
-for i=1: length(lunarGravityTrials)
-   disp(std(lunarGravityTrials(i).results.averageBrightness));
-   disp(lunarGravityTrials(i).speed);
-   plot(lunarGravityTrials(i).speed, std(lunarGravityTrials(i).results.averageBrightness), settings.pointSymbols(lunarGravityTrials(i).day), 'Color', settings.colors('Lunar'));
+for i=1: 2
+    plot(lunarSpeeds(lunarDays == i), lunarSTDs(lunarDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Lunar'), 'DisplayName', ['Day', num2str(i)])
 end
 
+xlim([50, 240]);
+%ylim([max(min(lunarSTD-1), 0), max(lunarNumPeaks)+1]);
 xlabel('Probe speed [mm/s]');
 ylabel('Standard deviation of brightness');
 title('Standard deviation vs. probe speed (Lunar)');
-%xlim([0, 240]);
 legend('Day 1', 'Day 2');
 
 saveFileNameNoExtension = 'Lunar-StandardDeviation';
@@ -113,11 +175,10 @@ printfig(1, saveFileNameNoExtension);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure(2);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
-for i=1: length(martianGravityTrials)
-   disp(std(martianGravityTrials(i).results.averageBrightness));
-   disp(martianGravityTrials(i).speed);
-   plot(martianGravityTrials(i).speed, std(martianGravityTrials(i).results.averageBrightness), settings.pointSymbols(martianGravityTrials(i).day), 'Color', settings.colors('Martian'));
+for i=1: 2
+    plot(martianSpeeds(martianDays == i), martianSTDs(martianDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Martian'), 'DisplayName', ['Day', num2str(i)])
 end
 
 xlabel('Probe speed [mm/s]');
@@ -128,6 +189,50 @@ legend('Day 1', 'Day 2');
 
 saveFileNameNoExtension = 'Martian-StandardDeviation';
 printfig(2, saveFileNameNoExtension);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         MICRO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+figure(3);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+%hold on;
+%plot(microSpeeds, microNumPeaks, '*');
+errorbar(cell2mat(microAverageSTDBySpeed.keys), cell2mat(microAverageSTDBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'DisplayName', 'Day 1');
+
+xlabel('Probe speed [mm/s]');
+ylabel('Standard deviation of brightness');
+title('Standard deviation vs. probe speed (Martian)');
+%xlim([0, 240]);
+legend('Day 1');
+
+saveFileNameNoExtension = 'Micro-StandardDeviation';
+printfig(3, saveFileNameNoExtension);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         ALL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Now lets plot everything on the same figure.
+figure(4);
+hold on;
+
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+errorbar(cell2mat(lunarAverageSTDBySpeed.keys), cell2mat(lunarAverageSTDBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
+errorbar(cell2mat(martianAverageSTDBySpeed.keys), cell2mat(martianAverageSTDBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
+errorbar(cell2mat(microAverageSTDBySpeed.keys), cell2mat(microAverageSTDBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
+xlabel('Probe speed [mm/s]');
+ylabel('Standard deviation of brightness');
+%title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
+title('Standard Deviation vs. Probe speed for Various Gravities');
+xlim([50, 240]);
+%ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
+legend()
+saveFileNameNoExtension = 'All-StandardDeviation';
+printfig(4, saveFileNameNoExtension);
 
 end
 
