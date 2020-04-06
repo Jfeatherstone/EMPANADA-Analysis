@@ -79,6 +79,14 @@ end
 lunarBrightnessNormalization = max(allLunarBrightnessData);
 %lunarGSquaredNormalization = max(allLunarGSquaredData);
 
+lunarSpeeds = zeros(1, length(lunarGravityTrials));
+lunarDays = zeros(1, length(lunarGravityTrials));
+
+for i=1: length(lunarGravityTrials)
+   lunarSpeeds(i) = lunarGravityTrials(i).speed;
+   lunarDays(i) = lunarGravityTrials(i).day;
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       MARTIAN CLEANUP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,6 +107,14 @@ end
 
 martianBrightnessNormalization = max(allMartianBrightnessData);
 %martianGSquaredNormalization = max(allMartianGSquaredData);
+
+martianSpeeds = zeros(1, length(martianGravityTrials));
+martianDays = zeros(1, length(martianGravityTrials));
+
+for i=1: length(martianGravityTrials)
+   martianSpeeds(i) = martianGravityTrials(i).speed;
+   martianDays(i) = martianGravityTrials(i).day;
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       MICRO CLEANUP
@@ -121,6 +137,13 @@ end
 microBrightnessNormalization = max(allMicroBrightnessData);
 %microGSquaredNormalization = max(allMicroGSquaredData);
 % Now that we have them separated and sorted, we can graph all of them
+
+% We don't need to record the days for micro as they are all from day 1
+microSpeeds = zeros(1, length(microGravityTrials));
+
+for i=1: length(microGravityTrials)
+   microSpeeds(i) = microGravityTrials(i).speed;
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       LUNAR BRIGTHNESS
