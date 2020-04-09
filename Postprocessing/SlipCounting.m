@@ -72,8 +72,8 @@ startup;
 
 % These values are chosen by just looking at the data, a more precise way
 % to find similar values should be looked into
-lunarMinPeakHeight = 100;
-martianMinPeakHeight = 100;
+lunarMinPeakHeight = 5;
+martianMinPeakHeight = 5;
 microMinPeakHeight = 5;
 minPeakDistance = 1;
 

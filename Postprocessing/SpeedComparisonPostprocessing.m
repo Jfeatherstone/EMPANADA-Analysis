@@ -55,8 +55,8 @@ for i=1: length(trials)
 
 end
 
-% We also want to sort our trials by speed, so that way they are graphed in
-% an order that actually makes sense
+% We also want to group our data together by the insertion speed, so that
+% we can graph the similar data at the same offset
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       LUNAR CLEANUP
@@ -162,8 +162,9 @@ set(gca,'ytick',[]);
 set(gca,'yticklabel',[]);
 % We don't want to auto adjust our axis limits since we want to not
 % have any of the graphs be on top of each other
-ylim([-1, 1]);
+%ylim([-1, 1]);
 legend();
+
 
 for i=1: length(lunarGravityTrials)
     brightnessData = (lunarGravityTrials(i).results.averageBrightness - mean(lunarGravityTrials(i).results.averageBrightness));
@@ -171,7 +172,7 @@ for i=1: length(lunarGravityTrials)
     % Now account for our offset
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
-    brightnessData = brightnessData - 1 + (2*i - 1) * offsetFactor;
+    brightnessData = brightnessData - 1 + (2*(lunarSpeeds(i)/max(lunarSpeeds) - 1)) * offsetFactor;
     plot(lunarGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(lunarGravityTrials(i).speed), ' mm/s']);
 
 end

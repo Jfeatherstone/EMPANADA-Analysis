@@ -1,5 +1,5 @@
 
-function BrightnessPostprocessing(startupFile, matFileContainingTrials)
+function BrightnessPostprocessing(matFileContainingTrials)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
