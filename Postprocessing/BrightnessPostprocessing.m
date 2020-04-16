@@ -34,11 +34,37 @@ figureHeight = 480;
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
 settings.charfrac = .7;
-run(startupFile);
+startup;
 
 % Set the colors of our lines
 brightnessLineColor = '#0072BD'; % Default blue
 brightnessDerivativeLineColor = '#7E2F8E'; % Default purple
+
+% Also create a sample graph with a trial from each gravity at the same
+% speed
+figure(length(trials) * 4);
+hold on;
+
+% I've chosen these by just examining the trial list
+% They're all 70mms trials
+lunarTrial = 1;
+martianTrial = 4;
+microTrial = 19;
+
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+title('Average Brightness by Gravity (210 mm/s)')
+xlabel('Probe position [mm]');
+ylabel('Average brightness [arb. units]');
+
+plot(trials(martianTrial).results.frameTime * 210, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
+plot(trials(lunarTrial).results.frameTime * 210, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
+plot(trials(microTrial).results.frameTime * 210, trials(microTrial).results.averageBrightness, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
+
+legend()
+
+printfig(length(trials) * 4, 'SampleBrightnessComparison');
+
+return
 
 for i=1: length(trials)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,5 +159,6 @@ for i=1: length(trials)
     
     hold off
 end
+
 
 end % Function end

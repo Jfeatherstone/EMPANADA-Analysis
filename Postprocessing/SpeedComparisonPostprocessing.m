@@ -149,12 +149,16 @@ end
 %       LUNAR BRIGTHNESS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Just a heads up that there are a lot of hard coded values in this section
+%, because I was trying to tweak the figure to look nice, including the
+%colors, the legend, and the xlimit
+
 % We don't want graphs to overlap, so we put an offset in here
 offsetFactor = 1 / length(lunarGravityTrials);
 figure(1);
 hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
-xlabel('Time [s]');
+xlabel('Probe position [mm]');
 ylabel('Average brightness [arb. units]');
 title('Speed Comparison of Probe in Lunar Gravity')
 % Since we have weird units, we don't need y ticks
@@ -163,8 +167,9 @@ set(gca,'yticklabel',[]);
 % We don't want to auto adjust our axis limits since we want to not
 % have any of the graphs be on top of each other
 %ylim([-1, 1]);
-legend();
+xlim([0, 2700]);
 
+lunarColors = ["#29d665", "#088743", "#345bcb", "#33a6cc"];
 
 for i=1: length(lunarGravityTrials)
     brightnessData = (lunarGravityTrials(i).results.averageBrightness - mean(lunarGravityTrials(i).results.averageBrightness));
@@ -172,16 +177,24 @@ for i=1: length(lunarGravityTrials)
     % Now account for our offset
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
-    brightnessData = brightnessData - 1 + (2*(lunarSpeeds(i)/max(lunarSpeeds) - 1)) * offsetFactor;
-    plot(lunarGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(lunarGravityTrials(i).speed), ' mm/s']);
-
+    brightnessData = brightnessData + (2*(lunarSpeeds(i)/max(lunarSpeeds) - 1)) * offsetFactor;
+    %plot(lunarGravityDisplayName', [num2str(lunarGravityTrials(i).speed), ' mm/sTrials(i).results.frameTime * lunarSpeeds(i), brightnessData, 'Color', lunarColors(i), 'DisplayName', [num2str(lunarGravityTrials(i).speed), ' mm/s']);
+    plot(lunarGravityTrials(i).results.frameTime * lunarSpeeds(i), brightnessData, 'Color', lunarColors(i), 'HandleVisibility', 'off');
 end
+
+% Create empty dots so that our legend looks neat
+plot([0, 0], [0, 0], 'Color', lunarColors(1), 'DisplayName', '70 mm/s');
+plot([0, 0], [0, 0], 'Color', lunarColors(3), 'DisplayName', '210 mm/s');
+
+legend('Location', 'northwest')
+
 % Now save the figure
 saveFileNameNoExtension = 'Lunar-SpeedComparisonBrightness';
 % This is a custom figure saving method, see file for more info
 % (printfig.m)
 printfig(1, saveFileNameNoExtension);
 hold off
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       LUNAR G SQUARED
@@ -225,12 +238,12 @@ hold off
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % We don't want graphs to overlap, so we put an offset in here
-offsetFactor = 1 / length(martianGravityTrials);
+offsetFactor = 2 / length(martianGravityTrials);
 
 figure(3);
 hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
-xlabel('Time [s]');
+xlabel('Probe displacement [mm]');
 ylabel('Average brightness [arb. units]');
 title('Speed Comparison of Probe in Martian Gravity')
 % Since we have weird units, we don't need y ticks
@@ -238,7 +251,7 @@ set(gca,'ytick',[]);
 set(gca,'yticklabel',[]);
 % We don't want to auto adjust our axis limits since we want to not
 % have any of the graphs be on top of each other
-ylim([-1, 1]);
+%ylim([-1, 1]);
 legend();
 
 for i=1: length(martianGravityTrials)
@@ -247,8 +260,8 @@ for i=1: length(martianGravityTrials)
     % Now account for our offset
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
-    brightnessData = brightnessData - 1 + (2*i - 1) * offsetFactor;
-    plot(martianGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(martianGravityTrials(i).speed), ' mm/s']);
+    brightnessData = brightnessData - 1 + (2*(martianSpeeds(i)/max(martianSpeeds) - 1)) * offsetFactor;
+    plot(martianGravityTrials(i).results.frameTime * martianSpeeds(i), brightnessData, 'DisplayName', [num2str(martianGravityTrials(i).speed), ' mm/s']);
 
 end
 % Now save the figure
@@ -300,12 +313,12 @@ hold off
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 % We don't want graphs to overlap, so we put an offset in here
-offsetFactor = 1 / length(microGravityTrials);
+offsetFactor = 2 / length(microGravityTrials);
 
 figure(5);
 hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
-xlabel('Time [s]');
+xlabel('Probe displacement [mm]');
 ylabel('Average brightness [arb. units]');
 title('Speed Comparison of Probe in Micro Gravity')
 % Since we have weird units, we don't need y ticks
@@ -313,7 +326,7 @@ set(gca,'ytick',[]);
 set(gca,'yticklabel',[]);
 % We don't want to auto adjust our axis limits since we want to not
 % have any of the graphs be on top of each other
-ylim([-1, 1]);
+%ylim([-1, 1]);
 legend();
 
 for i=1: length(microGravityTrials)
@@ -322,8 +335,8 @@ for i=1: length(microGravityTrials)
     % Now account for our offset
     % I kinda just messed around with this formula until it looked good, so
     % there's no real reason why it looks like this :/
-    brightnessData = brightnessData - 1 + (2*i - 1) * offsetFactor;
-    plot(microGravityTrials(i).results.frameTime, brightnessData, 'DisplayName', [num2str(microGravityTrials(i).speed), ' mm/s']);
+    brightnessData = brightnessData - 1 + (2*(microSpeeds(i)/max(microSpeeds) - 1)) * offsetFactor;
+    plot(microGravityTrials(i).results.frameTime * microSpeeds(i), brightnessData, 'DisplayName', [num2str(microGravityTrials(i).speed), ' mm/s']);
 end
 % Now save the figure
 saveFileNameNoExtension = 'Micro-SpeedComparisonBrightness';
