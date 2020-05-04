@@ -120,7 +120,7 @@ while hasFrame(video)
     plot([Xdata(i), Xdata(i)], verticalLineBounds, 'b--', 'HandleVisibility', 'off');
 
     % Title and axes
-    title('Average Brightness of Image vs. Time')
+    title(['Brightness Profile of a ', trials(trialNum).gravity, ' Trial'])
     xlabel('Time [s]')
     ylabel('Average Brightness [arb. units]')
     
@@ -128,9 +128,21 @@ while hasFrame(video)
     s2 = subplot(2, 1, 2);
     % Set the position that our overall result looks nice
     set(s2, 'Position', [.11, .02, .84, .45]);
+    hold on;
     % Show the current frame
     imshow(currentFrame);
-    
+
+    % Draw a scale bar on the image
+    % These values are chosen arbitrarily to look nice
+    scaleBarPosition = [170, 240];
+    scaleBarWidth = 40;
+    scaleBarColor = '#ffffff';
+    scaleBarEndLineHeight = 30;
+    plot(scaleBarPosition(1) + [0, scaleBarWidth], scaleBarPosition(2) + [0, 0], '-', 'Color', scaleBarColor)
+    plot(scaleBarPosition(1) + [0, 0], scaleBarPosition(2) + [-scaleBarEndLineHeight * .5, scaleBarEndLineHeight * .5], 'Color', scaleBarColor)
+    plot(scaleBarPosition(1) + scaleBarWidth + [0, 0], scaleBarPosition(2) + [-scaleBarEndLineHeight * .5, scaleBarEndLineHeight * .5], 'Color', scaleBarColor)
+    annotation('textbox', [.15, .25, .1, .1], 'String', '1 cm', 'Color', scaleBarColor, 'LineStyle', 'none');
+
     % We want to keep the video moving along, even if it means we skip
     % frames
     % For a smoother version of this, see RealTimeTrackingSave.m
@@ -147,9 +159,7 @@ while hasFrame(video)
     if i >= length(trials(trialNum).results.averageBrightness)
         break;
     end
-    
-    pause(.1)
-    
+        
     % Clear the graphs
     hold off
     

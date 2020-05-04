@@ -202,10 +202,16 @@ errorbar(cell2mat(microAveragePeaksBySpeed.keys), cell2mat(microAveragePeaksBySp
 xlabel('Probe speed [mm/s]');
 ylabel('# of slipping events');
 %title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
-title('Slipping events vs. Probe speed for Various Gravities');
+%title('Slipping events vs. Probe speed for Various Gravities');
 xlim([50, 240]);
-%ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
-legend()
+%ylim([max(min(microNumPeaks-1;texlabel), 0), max(microNumPeaks)+1]);
+
+% Instead of showing a legend, annotate the values of each one
+%legend()
+text(75, 20, 'Martian, $g \approx \frac{2}{5} g_{Earth}$', 'Interpreter', 'latex', 'Color', settings.colors('Martian'));
+text(140, 14, 'Lunar, $g \approx \frac{1}{6} g_{Earth}$', 'Interpreter', 'latex', 'Color', settings.colors('Lunar'));
+text(110, 7, 'Micro, $g \approx .001 g_{Earth}$', 'Interpreter', 'latex', 'Color', settings.colors('Micro'));
+
 saveFileNameNoExtension = 'All-SlipCounting';
 printfig(4, saveFileNameNoExtension);
 
