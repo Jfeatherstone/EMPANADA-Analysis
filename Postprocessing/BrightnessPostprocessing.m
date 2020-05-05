@@ -64,15 +64,13 @@ legend()
 
 printfig(length(trials) * 4, 'SampleBrightnessComparison');
 
-return
-
 for i=1: length(trials)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %      AVERAGE BRIGHTNESS
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Figure number doesn't really matter, so long as it is unique
-    figure(3*i);
+    figure(4*i);
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     
     % Normalize the data by subtracting out the mean (but don't actually
@@ -81,7 +79,7 @@ for i=1: length(trials)
     plot(trials(i).results.frameTime, brightnessData, 'Color', brightnessLineColor);
     
     % Create the title
-    titleStr = strcat('Day ', char(trials(i).day), ', speed=', char(trials(i).speed), 'mm/s, gravity=', char(trials(i).gravity));
+    titleStr = ['Day ', num2str(trials(i).day), ', speed=', trials(i).speed, 'mm/s, gravity=', trials(i).gravity];
     title(titleStr);
     
     xlabel('Time [s]');
@@ -94,17 +92,17 @@ for i=1: length(trials)
     set(gcf,'visible','off')
     
     % Now save the figure
-    saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-Brightness'];
+    saveFileNameNoExtension = ['Day', num2str(trials(i).day), '-', trials(i).gravity, '-', trials(i).speed, 'mms-Brightness'];
     % This is a custom figure saving method, see file for more info
     % (printfig.m)
-    printfig(3*i, saveFileNameNoExtension);
+    printfig(4*i, saveFileNameNoExtension);
     %clf
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %    BRIGHTNESS DERIVATIVE
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    figure(3*i + 1);
+    figure(4*i + 1);
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     % Normalize; see note about normalization above with brightness
     brightnessDerivativeData = trials(i).results.averageBrightnessDerivative;
@@ -123,17 +121,49 @@ for i=1: length(trials)
     set(gcf,'visible','off')
 
     % Now save the figure
-    saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-BrightnessDerivative'];
+    saveFileNameNoExtension = ['Day', num2str(trials(i).day), '-', trials(i).gravity, '-', trials(i).speed, 'mms-BrightnessDerivative'];
     % This is a custom figure saving method, see file for more info
     % (printfig.m)
-    printfig(3*i + 1, saveFileNameNoExtension);
+    printfig(4*i + 1, saveFileNameNoExtension);
     %clf
     
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % BRIGHTNESS DERIVATIVE AND BRIGHTNESS
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    figure(4*i + 2);
+    set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+    % Normalize; see note about normalization above with brightness
+    yyaxis right
+    plot(trials(i).results.frameTime, brightnessDerivativeData);
+    ylabel('d/dt of average brightness');
+    ylim([min(brightnessDerivativeData) - 40, max(brightnessDerivativeData) + 10])
+    
+    yyaxis left
+    plot(trials(i).results.frameTime, brightnessData);
+    ylabel('Average brightness');
+    ylim([min(brightnessData) - .5, max(brightnessData) + 2.5])
+    % Create the title
+    title(titleStr);
+    
+    xlabel('Time [s]');
+    % Since we have weird units, we don't need y ticks, but we'll leave
+    % them in
+    %set(gca,'ytick',[]);
+    %set(gca,'yticklabel',[]);
+    % Make the graph not pop up (since we'll be saving it to a file
+    set(gcf,'visible','off')
+
+    % Now save the figure
+    saveFileNameNoExtension = ['Day', num2str(trials(i).day), '-', trials(i).gravity, '-', trials(i).speed, 'mms-BrightnessDerivativeComparison'];
+    % This is a custom figure saving method, see file for more info
+    % (printfig.m)
+    printfig(4*i + 2, saveFileNameNoExtension);
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BRIGHTNESS DERIVATIVE SQUARED
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    figure(3*i + 2);
+    figure(4*i + 3);
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     % Normalize; see note about normalization above with brightness
     brightnessDerivativeSquaredData = trials(i).results.averageBrightnessDerivative.^2;
@@ -152,10 +182,10 @@ for i=1: length(trials)
     set(gcf,'visible','off')
     
     % Now save the figure
-    saveFileNameNoExtension = ['Day', char(trials(i).day), '-', char(trials(i).gravity), '-', char(trials(i).speed), 'mms-BrightnessDerivativeSquared'];
+    saveFileNameNoExtension = ['Day', num2str(trials(i).day), '-', trials(i).gravity, '-', trials(i).speed, 'mms-BrightnessDerivativeSquared'];
     % This is a custom figure saving method, see file for more info
     % (printfig.m)
-    printfig(3*i + 2, saveFileNameNoExtension);
+    printfig(4*i + 3, saveFileNameNoExtension);
     
     hold off
 end

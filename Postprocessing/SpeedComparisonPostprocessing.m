@@ -169,7 +169,7 @@ set(gca,'yticklabel',[]);
 %ylim([-1, 1]);
 xlim([0, 2700]);
 
-lunarColors = ["#29d665", "#088743", "#345bcb", "#33a6cc"];
+lunarColors = ["#29f665", "#088743", "#23bb00", "#345bcb", "#33a6cc"];
 
 for i=1: length(lunarGravityTrials)
     brightnessData = (lunarGravityTrials(i).results.averageBrightness - mean(lunarGravityTrials(i).results.averageBrightness));
@@ -183,8 +183,8 @@ for i=1: length(lunarGravityTrials)
 end
 
 % Create empty dots so that our legend looks neat
-plot([0, 0], [0, 0], 'Color', lunarColors(1), 'DisplayName', '70 mm/s');
-plot([0, 0], [0, 0], 'Color', lunarColors(3), 'DisplayName', '210 mm/s');
+plot([0, 0], [0, 0], 'Color', lunarColors(2), 'DisplayName', '70 mm/s');
+plot([0, 0], [0, 0], 'Color', lunarColors(4), 'DisplayName', '210 mm/s');
 
 legend('Location', 'northwest')
 

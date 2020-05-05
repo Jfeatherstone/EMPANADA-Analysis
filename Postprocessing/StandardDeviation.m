@@ -220,16 +220,16 @@ printfig(3, saveFileNameNoExtension);
 figure(4);
 hold on;
 
-yyaxis left
+%yyaxis left
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 errorbar(cell2mat(lunarAverageSTDBySpeed.keys), cell2mat(lunarAverageSTDBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
 errorbar(cell2mat(martianAverageSTDBySpeed.keys), cell2mat(martianAverageSTDBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
-yyaxis right
+%yyaxis right
 errorbar(cell2mat(microAverageSTDBySpeed.keys), cell2mat(microAverageSTDBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
 xlabel('Probe speed [mm/s]');
 ylabel('Standard deviation of brightness');
 %title(['Slipping events vs. probe speed (micro) (', num2str(microMinPeakHeight), ')']);
-title('Standard dev. vs. Probe speed for Various Gravities');
+title('Standard Dev. Comparison of Gravities');
 xlim([50, 240]);
 %ylim([max(min(microNumPeaks-1), 0), max(microNumPeaks)+1]);
 legend()
