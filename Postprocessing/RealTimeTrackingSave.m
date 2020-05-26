@@ -1,5 +1,5 @@
 
-function RealTimeTrackingSave(matFileContainingTrials)
+function recordingFrames = RealTimeTrackingSave(matFileContainingTrials)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
@@ -33,7 +33,7 @@ figure(1);
 
 % The number of the trial that we are looking to analyze
 % This can later be changed to iterate over trialNum very easily
-trialNum = 3;
+trialNum = 4;
 video = VideoReader([settings.datapath, trials(trialNum).fileName]);
 
 % Set the size of our figure (note that this is a tall figure)
@@ -67,7 +67,7 @@ frameTimeDifference = trials(trialNum).results.frameTime(2) - trials(trialNum).r
 
 % Start our index at the beginning as marked by the crop time, this will inevitably skip over a lot of numbers
 % though
-i = 1;
+i = 200;
 
 % Time offset because of the cropping
 % We have to cast to an int to round the number and then back to double
@@ -79,7 +79,7 @@ video.CurrentTime = croppedStartTime;
 % Calculate how long the cropped video is
 croppedEndTime = trials(trialNum).cropTimes(2) - mod(trials(trialNum).cropTimes(2), frameTimeDifference);
 
-croppedDuration = croppedEndTime - croppedStartTime;
+croppedDuration = croppedEndTime - croppedStartTime - 6;
 
 saveFileName = [settings.avi_savepath, 'Day', num2str(trials(trialNum).day), '-', trials(trialNum).gravity, '-', trials(trialNum).speed, 'mms-RealTime'];
 
@@ -147,7 +147,9 @@ while hasFrame(video)
     i = i + 1;
     
 end
-    
+
+return
+
 % Save the file as both a gif and video
 for n=1: length(recordingFrames)
     im = frame2im(recordingFrames(n));

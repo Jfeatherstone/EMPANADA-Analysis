@@ -42,7 +42,7 @@ brightnessDerivativeLineColor = '#7E2F8E'; % Default purple
 
 % Also create a sample graph with a trial from each gravity at the same
 % speed
-figure(length(trials) * 4);
+figure((length(trials) + 1) * 4);
 hold on;
 
 % I've chosen these by just examining the trial list
@@ -62,9 +62,9 @@ plot(trials(microTrial).results.frameTime * 210, trials(microTrial).results.aver
 
 legend()
 
-printfig(length(trials) * 4, 'SampleBrightnessComparison');
+printfig((length(trials) + 1) * 4, 'SampleBrightnessComparison');
 
-for i=1: length(trials)
+for i=30: length(trials)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %      AVERAGE BRIGHTNESS
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
