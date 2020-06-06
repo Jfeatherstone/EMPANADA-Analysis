@@ -90,6 +90,10 @@ for i = start: length(fileList)
         continue
     end
     
+    fileName = fileList(i).name;
+    % Even throw a debug message in there
+    fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset);
+    
     % First we remove the file extension
     splitExt = strsplit(fileList(i).name, '.');
     % We have to cast to char here because otherwise strsplit won't take this
@@ -109,7 +113,16 @@ for i = start: length(fileList)
     % Grab the speed and take everything but the last 3 characters (mms)
     speed = char(nameFields(3));
     speed = speed(1:end-3);
-        
+    % The old speeds are all scaled wrong, so we have to adjust if the day
+    % is 1 or 2
+    % I determined this value experimentally, see LabBlog for more info
+    % specifically the post on June 1, 2020
+    speedRescale = .0407;
+    
+    if day == 1 || day == 2
+       speed = num2str(str2double(speed) * speedRescale); 
+    end
+    
     % Now we grab the start and end times
     % These cells are formatted as numbers in the sheet, so we don't have
     % to do any conversions
@@ -119,11 +132,7 @@ for i = start: length(fileList)
     % multiple trials that have the same parameters, but this doesn't
     % actually matter to us, so we ignore it (but obviously keep it in the
     % name)
-    
-    fileName = fileList(i).name;
-    % Even throw a debug message in there
-    fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset);
-        
+            
     % Add this trial into our array
     trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'cropTimes', cropTimes, 'results', 'N/A');
 end

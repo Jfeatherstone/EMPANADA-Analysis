@@ -87,17 +87,20 @@ for i=1: length(trials)
     
     % Now calculate the derivative of the brightness
     
+    % We normalize the trial to do this
+    normalizedAverageBrightness = averageBrightness / max(averageBrightness);
+    
     brightnessDerivative = zeros(1, numFrames);
     % This is our delta t in the central difference
 
     % Use central difference for every point except first and last
     for j=2: numFrames - 1
-        brightnessDerivative(j) = (averageBrightness(j-1) - averageBrightness(j+1)) / (2 * frameTimeDifference);
+        brightnessDerivative(j) = (normalizedAverageBrightness(j-1) - normalizedAverageBrightness(j+1)) / (2 * frameTimeDifference);
     end
     
     % Now use the proper stencil for the first and last points
-    brightnessDerivative(1) = (averageBrightness(1) - averageBrightness(2)) / frameTimeDifference;
-    brightnessDerivative(end) = (averageBrightness(end-1) - averageBrightness(end)) / frameTimeDifference;
+    brightnessDerivative(1) = (normalizedAverageBrightness(1) - normalizedAverageBrightness(2)) / frameTimeDifference;
+    brightnessDerivative(end) = (normalizedAverageBrightness(end-1) - normalizedAverageBrightness(end)) / frameTimeDifference;
     
     % Now save all of the data
     

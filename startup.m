@@ -62,12 +62,14 @@ settings.colors('Martian') = '#cc0000';
 % Dark gray
 %settings.colors('Micro') = '#989898';
 settings.colors('Micro') = '#424242';
-
+settings.colors('Earth') = '#2156ab';
 % And we'll have different symbols for each day
 settings.pointSymbols = containers.Map('KeyType', 'double', 'ValueType', 'char');
 
 settings.pointSymbols(1) = '^';
 settings.pointSymbols(2) = '+';
+settings.pointSymbols(3) = '*';
+settings.pointSymbols(4) = '+';
 
 % work in your matlab directory by default
 cd(settings.matlabpath)
