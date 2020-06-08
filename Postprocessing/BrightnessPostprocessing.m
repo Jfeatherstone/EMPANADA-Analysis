@@ -54,7 +54,7 @@ microTrial = 19;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 title('Average Brightness by Gravity (210 mm/s)')
 xlabel('Probe position [mm]');
-ylabel('Average brightness [arb. units]');
+ylabel('Average brightness [a.u.]');
 
 plot(trials(martianTrial).results.frameTime * 210, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
 plot(trials(lunarTrial).results.frameTime * 210, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
@@ -83,7 +83,7 @@ for i=1: length(trials)
     title(titleStr);
     
     xlabel('Time [s]');
-    ylabel('Average brightness [arb. units]');
+    ylabel('Average brightness [a.u.]');
     % Since we have weird units, we don't need y ticks, but we'll leave
     % them in
     %set(gca,'ytick',[]);
@@ -112,7 +112,7 @@ for i=1: length(trials)
     title(titleStr);
     
     xlabel('Time [s]');
-    ylabel({'d/dt of average brightness', '[arb. units]'});
+    ylabel('d/dt of average brightness [a.u.]');
     % Since we have weird units, we don't need y ticks, but we'll leave
     % them in
     %set(gca,'ytick',[]);
@@ -173,7 +173,7 @@ for i=1: length(trials)
     title(titleStr);
     
     xlabel('Time [s]');
-    ylabel({'|d/dt of average brightness|', '[arb. units]'});
+    ylabel('|d/dt of average brightness| [a.u.]');
     % Since we have weird units, we don't need y ticks, but we'll leave
     % them in
     %set(gca,'ytick',[]);
