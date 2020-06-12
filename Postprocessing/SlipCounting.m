@@ -124,11 +124,11 @@ for i=1: length(microGravityTrials)
 end
 
 for i=1: length(earthGravityTrials)
-   % We count trials by using the localmax function on the brightness derivative
-   data = abs(earthGravityTrials(i).results.averageBrightnessDerivative);
-   earthNumPeaks(i) = length(findpeaks(data, earthGravityTrials(i).results.frameTime, 'MinPeakHeight', earthMinPeakHeight, 'MinPeakDistance', minPeakDistance));
-   earthSpeeds(i) = earthGravityTrials(i).speed;
-   earthDays(i) = earthGravityTrials(i).day;
+    % We count trials by using the localmax function on the brightness derivative
+    data = abs(earthGravityTrials(i).results.averageBrightnessDerivative);
+    earthNumPeaks(i) = length(findpeaks(data, earthGravityTrials(i).results.frameTime, 'MinPeakHeight', earthMinPeakHeight, 'MinPeakDistance', minPeakDistance));
+    earthSpeeds(i) = earthGravityTrials(i).speed;
+    earthDays(i) = earthGravityTrials(i).day;
 end
 
 % Now we sort points into their respective speed categories so that we can
@@ -221,7 +221,7 @@ printfig(3, saveFileNameNoExtension);
 figure(4);
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
-for i=1: 4
+for i=1: 5
     plot(earthSpeeds(earthDays == i), earthNumPeaks(earthDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Earth'), 'DisplayName', ['Day', num2str(i)])
 end
 %plot(lunarSpeeds, lunarNumPeaks, '*');
