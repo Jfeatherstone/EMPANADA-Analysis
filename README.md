@@ -13,7 +13,7 @@ Below is a list of all of the files contained in this repo, including what they 
 
 This file organizes the data files based on their file name and loads them into a struct called trials. This struct includes information about the experiment parameters (speed, day, gravity, crop times, validity of data), the name of the file, and an empty spot to put the analysis results later on.
 
-The script assumes that all files are named using the convention `Day<#>-<Gravity>-<speed>mms.mkv` and that they are located in the directory defined by the startup file `startup.m`
+The script assumes that all files are named using the convention `Day<#>-<Gravity>-<speed>mms.mov` and that they are located in the directory defined by the startup file `startup.m`
 
 Some other notes about this file:
 - The spreadsheet located in the root directory contains several pieces of information about each trial that is read in during this preprocessing:
