@@ -1,4 +1,4 @@
-function [outputArg1,outputArg2] = ForceDataPostprocessing(matFileContainingTrials)
+function = ForceDataPostprocessing(matFileContainingTrials)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
@@ -58,9 +58,6 @@ for i = 1: length(trials)
            break;
        end
     end
-    disp(trials(i).speed);
-    disp(startIndex);
-    disp(endIndex);
     
     data = trials(i).results.forceData(startIndex:endIndex);
     time = trials(i).results.frameTime(startIndex:endIndex) - trials(i).results.frameTime(startIndex);
