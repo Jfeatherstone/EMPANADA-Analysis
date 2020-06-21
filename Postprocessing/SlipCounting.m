@@ -32,7 +32,6 @@ for i=1: length(trials)
    trials(i).speed = str2double(trials(i).speed);
 end
 
-
 % We want to sort each trial into it's gravity
 % These are the same structs from LoadFiles.m
 microGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});

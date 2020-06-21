@@ -55,22 +55,22 @@ set(0,'DefaultAxesLineWidth', settings.linewidth)
 % Now we want to define set colors for each gravity so we can be consistent
 % across any figures that involve multiple gravities
 settings.colors = containers.Map('KeyType', 'char', 'ValueType', 'char');
+settings.colors('Lunar') = '#B137E5'; % Matlab default purple
+settings.colors('Lunar-alt') = '#282828'; % Dark gray
+settings.colors('Martian') = '#CC0000'; % Red
+settings.colors('Martian-alt') = '#454545'; % Gray
+settings.colors('Micro') = '#424242'; % Gray
+settings.colors('Micro-alt') = '#DF982E'; % Orange
+settings.colors('Earth') = '#2156ab'; % Blue
+settings.colors('Earth-alt') = '#007360'; % Dark teal 
 
-% Matlab default purple
-settings.colors('Lunar') = '#b137e5';
-settings.colors('Martian') = '#cc0000';
-% Dark gray
-%settings.colors('Micro') = '#989898';
-settings.colors('Micro') = '#424242';
-settings.colors('Earth') = '#2156ab';
 % And we'll have different symbols for each day
 settings.pointSymbols = containers.Map('KeyType', 'double', 'ValueType', 'char');
-
 settings.pointSymbols(1) = '^';
 settings.pointSymbols(2) = '+';
 settings.pointSymbols(3) = '*';
-settings.pointSymbols(4) = '+';
-settings.pointSymbols(5) = '^';
+settings.pointSymbols(4) = 's';
+settings.pointSymbols(5) = 'o';
 
 % work in your matlab directory by default
 cd(settings.matlabpath)
