@@ -35,6 +35,23 @@ load(matFileContainingTrials, 'trials')
 % that have the same form below
 %results = struct('frameTime', frameTime, 'averageBrightness', averageBrightness, 'averageBrightnessDerivative', brightnessDerivative);
 
+% The first thing we need to do is determine the size of the videos we will
+% be sampling. Since they may be taken with different cameras/FoV, we want
+% to make sure that the same number of pixels is sampled regardless
+
+% Initialize as an arbitrarily high number
+minWidth = 10000;
+minHeight = 10000;
+
+% I don't believe there's a faster way to do this, unfortunately
+for i=1: length(trials)
+    currentVideo = VideoReader([settings.datapath, trials(i).fileName]);
+    minWidth = min(minWidth, currentVideo.Width);
+    minHeight = min(minHeight, currentVideo.Height);
+end
+
+fprintf('Found minimum video dimensions %i x %i, videos will be cropped to this size.\n', minWidth, minHeight);
+
 for i=1: length(trials)
     
     fprintf('Currently processing trial %i of %i:\n', i, length(trials));
@@ -57,6 +74,21 @@ for i=1: length(trials)
     frameTime = zeros(1, numFrames);
     averageBrightness = zeros(1, numFrames);
 
+    % We want to establish what portion of the video we will be looking at,
+    % since most will end up cropped
+    croppedStartPixelHorizontal = 0;
+    croppedStartPixelVertical = 0;
+    if (currentVideo.Width > minWidth)
+        % Hopefully we don't have an odd width or height, but if so, we
+        % will round up (7.5 -> 8)
+        croppedStartPixelHorizontal = round((currentVideo.Width - minWidth) / 2);
+    end
+    if (currentVideo.Height > minHeight)
+        % Hopefully we don't have an odd width or height, but if so, we
+        % will round up (7.5 -> 8)
+        croppedStartPixelVertical = round((currentVideo.Height - minHeight) / 2);
+    end
+    
     % Now we iterate over every frame to populate the above matrices
     % Since this is done with a while loop, we also want to keep track of
     % the current frame number (changed since read() is depracated)
@@ -76,8 +108,14 @@ for i=1: length(trials)
         % Converting the frame to gray-scale yields better results
         currentFrameGrayScale = rgb2gray(currentFrame);
         
+        % The indexing is to account for the spatial cropping as defined by
+        % minWidth and minHeight
+        % +1 in the first index since matlab is 1-indexed (arrays start at
+        % 1)
+        croppedFrameGrayScale = currentFrameGrayScale(croppedStartPixelVertical+1:croppedStartPixelVertical+minHeight,croppedStartPixelHorizontal+1:croppedStartPixelHorizontal+minWidth);
+        
         % Record the average brightness in our matrix
-        averageBrightness(currentFrameNumber) = mean2(currentFrameGrayScale);
+        averageBrightness(currentFrameNumber) = mean2(croppedFrameGrayScale);
  
         currentFrameNumber = currentFrameNumber + 1;
         if currentFrameNumber > numFrames
