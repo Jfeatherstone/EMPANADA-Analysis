@@ -74,13 +74,16 @@ settings.charfrac = .55;
 startup;
 
 % These values are chosen by just looking at the data, a more precise way
-% to find similar values should be looked into
+% to find similar values should be looked into. It makes sense to keep all
+% of the values the same, though I'll keep the variable separate for now,
+% just in case :/
 lunarMinPeakHeight = .05;
 martianMinPeakHeight = .05;
 microMinPeakHeight = .05;
 earthMinPeakHeight = .05;
 
-minPeakDistance = .25;
+% The number of seconds that must pass between slip events being detected
+minPeakDistance = .5;
 
 lunarNumPeaks = zeros(1, length(lunarGravityTrials));
 lunarSpeeds = zeros(1, length(lunarGravityTrials));
