@@ -48,11 +48,11 @@ hold on;
 % I've chosen these by just examining the trial list
 % They're all 70mms trials
 lunarTrial = 1;
-martianTrial = 4;
+martianTrial = 5;
 microTrial = 19;
 
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
-title('Average Brightness by Gravity (210 mm/s)')
+title(['Average Brightness by Gravity (', trials(lunarTrial).speed, ' mm/s)'])
 xlabel('Probe position [mm]');
 ylabel('Average brightness [a.u.]');
 
