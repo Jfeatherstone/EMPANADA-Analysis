@@ -47,6 +47,7 @@ end
 microGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 martianGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 lunarGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
+earthGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 
 for i=1: length(trials)
     switch trials(i).gravity
@@ -56,6 +57,8 @@ for i=1: length(trials)
             martianGravityTrials(length(martianGravityTrials) + 1) = trials(i);
         case 'Micro'
             microGravityTrials(length(microGravityTrials) + 1) = trials(i);
+        case 'Earth'
+            earthGravityTrials(length(earthGravityTrials) + 1) = trials(i);
     end
 
 end
@@ -71,6 +74,9 @@ martianGravityTrials = martianGravityTrials(index);
 [~, index] = sort([microGravityTrials.speed], 'ascend');
 microGravityTrials = microGravityTrials(index);
 
+[~, index] = sort([earthGravityTrials.speed], 'ascend');
+earthGravityTrials = earthGravityTrials(index);
+
 % We create all of these separate arrays so that we can plot much easier
 % later. In python this is could be replaced by doing something like:
 % array[:,0] but I don't think this is quite possible in Matlab
@@ -85,6 +91,10 @@ martianDays = zeros(1, length(martianGravityTrials));
 microMaxima = zeros(1, length(microGravityTrials));
 microSpeeds = zeros(1, length(microGravityTrials));
 microDays = zeros(1, length(microGravityTrials));
+
+earthMaxima = zeros(1, length(earthGravityTrials));
+earthSpeeds = zeros(1, length(earthGravityTrials));
+earthDays = zeros(1, length(earthGravityTrials));
 
 % Now we populate all of the arrays we just created
 for i=1: length(lunarGravityTrials)
@@ -103,6 +113,12 @@ for i=1: length(microGravityTrials)
    microMaxima(i) = max(microGravityTrials(i).results.averageBrightness);
    microSpeeds(i) = microGravityTrials(i).speed;
    microDays(i) = microGravityTrials(i).day;
+end
+
+for i=1: length(earthGravityTrials)
+   earthMaxima(i) = max(earthGravityTrials(i).results.averageBrightness);
+   earthSpeeds(i) = earthGravityTrials(i).speed;
+   earthDays(i) = earthGravityTrials(i).day;
 end
 
 % Now we sort points into their respective speed categories so that we can
@@ -135,6 +151,13 @@ microErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
 for i=1: length(microGravityTrials)
     microAverageMaximaBySpeed(microGravityTrials(i).speed) = mean(microMaxima(microSpeeds == microGravityTrials(i).speed));
     microErrorBarsBySpeed(microGravityTrials(i).speed) = std(microMaxima(microSpeeds == microGravityTrials(i).speed));
+end
+
+earthAverageMaximaBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+earthErrorBarsBySpeed = containers.Map('KeyType', 'double', 'ValueType', 'any');
+for i=1: length(earthGravityTrials)
+    earthAverageMaximaBySpeed(earthGravityTrials(i).speed) = mean(earthMaxima(earthSpeeds == earthGravityTrials(i).speed));
+    earthErrorBarsBySpeed(earthGravityTrials(i).speed) = std(earthMaxima(earthSpeeds == earthGravityTrials(i).speed));
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -207,17 +230,39 @@ legend("Day " + (min(microDays):max(microDays)));
 saveFileNameNoExtension = 'Micro-MaxLoad';
 printfig(3, saveFileNameNoExtension);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         EARTH
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(4);
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+hold on;
+for i=min(earthDays): max(earthDays)
+    plot(earthSpeeds(earthDays == i), earthMaxima(earthDays == i), ['-.', settings.pointSymbols(i)], 'Color', settings.colors('Earth'), 'DisplayName', ['Day', num2str(i)])
+end
+% Now plot the average with error bars
+errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth-alt'), 'LineWidth', 1.5);
+xlim([0, 12]);
+xlabel('Probe speed [mm/s]');
+ylabel('Maximum Brightness [a.u.]');
+title('Maximum Load via Brightness (Earth)');
+legend("Day " + (min(earthDays):max(earthDays)));
+
+saveFileNameNoExtension = 'Earth-MaxLoad';
+printfig(4, saveFileNameNoExtension);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         ALL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(4);
+figure(5);
 hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 
+%yyaxis left
 errorbar(cell2mat(lunarAverageMaximaBySpeed.keys), cell2mat(lunarAverageMaximaBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
 errorbar(cell2mat(martianAverageMaximaBySpeed.keys), cell2mat(martianAverageMaximaBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
 errorbar(cell2mat(microAverageMaximaBySpeed.keys), cell2mat(microAverageMaximaBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
+%yyaxis right
+%errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
 
 xlabel('Probe speed [mm/s]');
 ylabel('Maximum Brightness [a.u.]');
@@ -225,6 +270,6 @@ title('Maximum Load By Gravity via Brightness');
 xlim([0, 12]);
 legend()
 saveFileNameNoExtension = 'All-MaxLoad';
-printfig(4, saveFileNameNoExtension);
+printfig(5, saveFileNameNoExtension);
 
 end
