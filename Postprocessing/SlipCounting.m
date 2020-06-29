@@ -223,7 +223,7 @@ printfig(3, saveFileNameNoExtension);
 figure(4);
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
-for i=1: 5
+for i=min(earthDays): max(earthDays)
     plot(earthSpeeds(earthDays == i), earthNumPeaks(earthDays == i), ['-', settings.pointSymbols(i)], 'Color', settings.colors('Earth'), 'DisplayName', ['Day', num2str(i)])
 end
 %plot(lunarSpeeds, lunarNumPeaks, '*');

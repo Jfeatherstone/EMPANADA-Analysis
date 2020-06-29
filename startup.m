@@ -71,6 +71,8 @@ settings.pointSymbols(2) = '+';
 settings.pointSymbols(3) = '*';
 settings.pointSymbols(4) = 's';
 settings.pointSymbols(5) = 'o';
+settings.pointSymbols(6) = '^';
+settings.pointSymbols(7) = '+';
 
 % work in your matlab directory by default
 cd(settings.matlabpath)
