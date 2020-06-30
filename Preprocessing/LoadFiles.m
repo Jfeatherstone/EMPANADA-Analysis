@@ -119,7 +119,7 @@ for i = start: length(fileList)
     speedRescale = .0407;
     
     if day == 1 || day == 2
-       speed = num2str(str2double(speed) * speedRescale); 
+       speed = num2str(round(str2double(speed) * speedRescale, 1)); 
     end
     
     % Now we grab the start and end times

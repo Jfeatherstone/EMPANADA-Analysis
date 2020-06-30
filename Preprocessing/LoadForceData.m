@@ -40,6 +40,7 @@ fileList = dir('Force-data');
 dataKeyExcel = readtable('EMPANADA Data Files Key.xlsx');
 startTimes = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,6)));
 endTimes = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,7)));
+questionable = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKeyExcel(:,8)));
 
 for i = start: length(fileList)
     % First we want to do some checks to make sure that invalid files don't
@@ -60,13 +61,13 @@ for i = start: length(fileList)
         continue
     end
     
-    % Make sure we have a .mov extension
+    % Make sure we have a .csv extension
     if ~strcmp(fileList(i).name(end-3:end), '.csv')
         fprintf('Invalid file: "%s": has incorrect extension (correct=.csv) (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset);
         offset = offset + 1;
         continue
     end
- 
+    
     fileName = fileList(i).name;
     % Even throw a debug message in there
     fprintf('Loading file "%s"... (%i of %i)\n', fileName, i - offset, length(fileList) - offset);
@@ -113,6 +114,13 @@ for i = start: length(fileList)
     % sheet contains the file names of the videos
     fileNameWithMOV = [removedExt, '.mov'];
     
+    % If the data has been marked as questionable, we ignore it
+    if strcmp(questionable(fileNameWithMOV), 'Yes')
+        fprintf('Invalid file: "%s": has been marked as questionable (%i of %i)\n', fileList(i).name, i - offset, length(fileList) - offset);
+        offset = offset + 1;
+        continue
+    end    
+
     cropTimes = [startTimes(fileNameWithMOV), endTimes(fileNameWithMOV)];
     
     trials(i - offset) = struct('day', day, 'gravity', gravity, 'speed', speed, 'fileName', fileName, 'cropTimes', cropTimes, 'results', results);
