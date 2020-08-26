@@ -155,4 +155,5 @@ for i=1: length(trials)
 
 end
 
+!curl -X POST $SMS_ENDPOINT -d "Analysis done"
 end % Function end
