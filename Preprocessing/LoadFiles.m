@@ -56,7 +56,6 @@ questionable = containers.Map(table2array(dataKeyExcel(:,2)), table2array(dataKe
 
 %for i = 1: length(fileList);
 for i = start: length(fileList)
-    
     % First we want to do some checks to make sure that invalid files don't
     % get processed
     

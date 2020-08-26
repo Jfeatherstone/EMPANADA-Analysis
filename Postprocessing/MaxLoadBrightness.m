@@ -258,16 +258,16 @@ hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 
 %yyaxis left
-errorbar(cell2mat(lunarAverageMaximaBySpeed.keys), cell2mat(lunarAverageMaximaBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
 errorbar(cell2mat(martianAverageMaximaBySpeed.keys), cell2mat(martianAverageMaximaBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
+errorbar(cell2mat(lunarAverageMaximaBySpeed.keys), cell2mat(lunarAverageMaximaBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
 errorbar(cell2mat(microAverageMaximaBySpeed.keys), cell2mat(microAverageMaximaBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
 %yyaxis right
 %errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
 
 xlabel('Probe speed [mm/s]');
 ylabel('Maximum Brightness [a.u.]');
-title('Maximum Load By Gravity via Brightness');
-xlim([0, 12]);
+%title('Maximum Load By Gravity via Brightness');
+xlim([0, 12.5]);
 legend()
 saveFileNameNoExtension = 'All-MaxLoad';
 printfig(5, saveFileNameNoExtension);

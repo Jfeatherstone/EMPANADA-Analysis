@@ -159,7 +159,7 @@ figure(1);
 hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 xlabel('Probe position [mm]');
-ylabel('Average brightness [arb. units]');
+ylabel('Average brightness [a.u.]');
 title('Speed Comparison of Probe in Lunar Gravity')
 % Since we have weird units, we don't need y ticks
 set(gca,'ytick',[]);
@@ -167,7 +167,7 @@ set(gca,'yticklabel',[]);
 % We don't want to auto adjust our axis limits since we want to not
 % have any of the graphs be on top of each other
 %ylim([-1, 1]);
-xlim([0, 2700]);
+%xlim([0, 2700]);
 
 lunarColors = ["#29f665", "#088743", "#23bb00", "#345bcb", "#33a6cc"];
 
@@ -183,8 +183,8 @@ for i=1: length(lunarGravityTrials)
 end
 
 % Create empty dots so that our legend looks neat
-plot([0, 0], [0, 0], 'Color', lunarColors(2), 'DisplayName', '70 mm/s');
-plot([0, 0], [0, 0], 'Color', lunarColors(4), 'DisplayName', '210 mm/s');
+plot([0, 0], [0, 0], 'Color', lunarColors(2), 'DisplayName', [num2str(lunarSpeeds(1)), ' mm/s']);
+plot([0, 0], [0, 0], 'Color', lunarColors(4), 'DisplayName', [num2str(lunarSpeeds(4)), ' mm/s']);
 
 legend('Location', 'northwest')
 

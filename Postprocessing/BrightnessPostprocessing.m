@@ -40,6 +40,9 @@ startup;
 brightnessLineColor = '#0072BD'; % Default blue
 brightnessDerivativeLineColor = '#7E2F8E'; % Default purple
 
+downsampleFactor = 1;
+noiseThreshhold = .04;
+
 % Also create a sample graph with a trial from each gravity at the same
 % speed
 figure((length(trials) + 1) * 4);
@@ -105,8 +108,8 @@ for i=1: length(trials)
     figure(4*i + 1);
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     % Normalize; see note about normalization above with brightness
-    brightnessDerivativeData = trials(i).results.averageBrightnessDerivative;
-    plot(trials(i).results.frameTime, brightnessDerivativeData, 'Color', brightnessDerivativeLineColor);
+    brightnessDerivativeData = AverageDownsample(trials(i).results.averageBrightnessDerivative, downsampleFactor);
+    plot(AverageDownsample(trials(i).results.frameTime, downsampleFactor), brightnessDerivativeData, 'Color', brightnessDerivativeLineColor);
     
     % Create the title
     title(titleStr);
@@ -134,7 +137,7 @@ for i=1: length(trials)
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     % Normalize; see note about normalization above with brightness
     yyaxis right
-    plot(trials(i).results.frameTime, brightnessDerivativeData);
+    plot(AverageDownsample(trials(i).results.frameTime, downsampleFactor), brightnessDerivativeData);
     ylabel('d/dt of average brightness');
     ylim([min(brightnessDerivativeData) - .4, max(brightnessDerivativeData) + .1])
     
@@ -166,8 +169,9 @@ for i=1: length(trials)
     figure(4*i + 3);
     set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
     % Normalize; see note about normalization above with brightness
-    brightnessDerivativeAbsData = abs(trials(i).results.averageBrightnessDerivative);
-    plot(trials(i).results.frameTime, brightnessDerivativeAbsData, 'Color', brightnessDerivativeLineColor);
+    brightnessDerivativeAbsData = AverageDownsample(abs(trials(i).results.averageBrightnessDerivative), downsampleFactor);
+    brightnessDerivativeAbsData(brightnessDerivativeAbsData < noiseThreshhold) = brightnessDerivativeAbsData(brightnessDerivativeAbsData < noiseThreshhold) / 10.;
+    plot(AverageDownsample(trials(i).results.frameTime, downsampleFactor), brightnessDerivativeAbsData, 'Color', brightnessDerivativeLineColor);
     
     % Create the title
     title(titleStr);
