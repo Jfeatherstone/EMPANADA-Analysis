@@ -155,5 +155,7 @@ for i=1: length(trials)
 
 end
 
+% Text me that it finished! This is my own custom server so it should
+% probably be removed if anyone else is running the code
 !curl -X POST $SMS_ENDPOINT -d "Analysis done"
 end % Function end

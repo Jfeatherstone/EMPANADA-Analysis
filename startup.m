@@ -66,13 +66,17 @@ settings.colors('Earth-alt') = '#007360'; % Dark teal
 
 % And we'll have different symbols for each day
 settings.pointSymbols = containers.Map('KeyType', 'double', 'ValueType', 'char');
-settings.pointSymbols(1) = '^';
-settings.pointSymbols(2) = '+';
+settings.pointSymbols(1) = '+';
+settings.pointSymbols(2) = 'o';
 settings.pointSymbols(3) = '*';
-settings.pointSymbols(4) = 's';
-settings.pointSymbols(5) = 'o';
-settings.pointSymbols(6) = '^';
-settings.pointSymbols(7) = '+';
+settings.pointSymbols(4) = '.';
+settings.pointSymbols(5) = 'x';
+settings.pointSymbols(6) = 's';
+settings.pointSymbols(7) = 'd';
+settings.pointSymbols(8) = '^';
+settings.pointSymbols(9) = 'v';
+settings.pointSymbols(10) = '>';
+settings.pointSymbols(11) = '<';
 
 % work in your matlab directory by default
 cd(settings.matlabpath)

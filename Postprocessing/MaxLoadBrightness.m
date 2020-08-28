@@ -237,7 +237,7 @@ figure(4);
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 hold on;
 for i=min(earthDays): max(earthDays)
-    plot(earthSpeeds(earthDays == i), earthMaxima(earthDays == i), ['-.', settings.pointSymbols(i)], 'Color', settings.colors('Earth'), 'DisplayName', ['Day', num2str(i)])
+    plot(earthSpeeds(earthDays == i), earthMaxima(earthDays == i), ['-.', settings.pointSymbols(i)])
 end
 % Now plot the average with error bars
 errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth-alt'), 'LineWidth', 1.5);
@@ -245,7 +245,7 @@ xlim([0, 12]);
 xlabel('Probe speed [mm/s]');
 ylabel('Maximum Brightness [a.u.]');
 title('Maximum Load via Brightness (Earth)');
-legend("Day " + (min(earthDays):max(earthDays)));
+legend(["Day " + (min(earthDays):max(earthDays)), 'Average']);
 
 saveFileNameNoExtension = 'Earth-MaxLoad';
 printfig(4, saveFileNameNoExtension);
