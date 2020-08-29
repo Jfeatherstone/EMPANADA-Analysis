@@ -59,9 +59,9 @@ title(['Average Brightness by Gravity (', trials(lunarTrial).speed, ' mm/s)'])
 xlabel('Probe position [mm]');
 ylabel('Average brightness [a.u.]');
 
-plot(trials(martianTrial).results.frameTime * 210, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
-plot(trials(lunarTrial).results.frameTime * 210, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
-plot(trials(microTrial).results.frameTime * 210, trials(microTrial).results.averageBrightness, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
+plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
+plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
+plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageBrightness, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
 
 legend()
 
