@@ -81,9 +81,9 @@ for i = start: length(fileList)
     % Split the name into day, gravity, and speed
     nameFields = strsplit(removedExt, '-');
 
-    % Grab the day and take only the last character
+    % Grab the day and take only the last characters
     day = char(nameFields(1));
-    day = str2double(day(end:end));
+    day = str2double(day(4:end));
     
     % Don't need to do any editing here
     gravity = nameFields(2);
