@@ -1,4 +1,9 @@
-function MaxLoadBrightness(matFileContainingTrials)
+function MaxLoadBrightnessEarth(matFileContainingTrials)
+% This file is very similar to MaxLoadBrightness but it focuses only on the
+% Earth data since we have to do a little extra manipulation there. We do
+% this because we want to group the data together by probe flexibility as
+% well, which requires a bit more work
+
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
@@ -28,8 +33,8 @@ global settings
 
 
 % Set our figure sizes
-figureWidth = 540;
-figureHeight = 400;
+figureWidth = 720;
+figureHeight = 480;
 
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
@@ -249,6 +254,7 @@ legend(["Day " + (min(earthDays):max(earthDays)), 'Average']);
 
 saveFileNameNoExtension = 'Earth-MaxLoad';
 printfig(4, saveFileNameNoExtension);
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         ALL
