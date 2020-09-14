@@ -1,5 +1,5 @@
 
-function trials = BrightnessAnalysis(matFileContainingTrials)
+function trials = BrightnessAnalysis(matFileContainingTrials, outputPath, highlightForceChains)
 % Most of the code here is taken from BrightnessGSquaredAnalysis.m and the
 % purpose is just to separate the two methods, since G Squared takes much
 % longer to run
@@ -8,6 +8,11 @@ function trials = BrightnessAnalysis(matFileContainingTrials)
 if ~exist('matFileContainingTrials', 'var')
    matFileContainingTrials = 'Preprocessing/LoadFiles.mat';
    fprintf('Warning: file list not provided, defaulting to %s!\n', matFileContainingTrials);
+end
+
+if ~exist('highlightForceChains', 'var')
+   highlightForceChains = false; 
+   fprintf("Defaulting to analyzing raw images; not apply force chain identification algorithm");
 end
 
 % Make sure that the startup file has been run
@@ -21,10 +26,13 @@ global settings
 % We also want to make sure that the output file is always saved inside the
 % Analysis folder, so if we are running the function from elsewhere, we
 % need to account for that
-outputPath = 'BrightnessAnalysis.mat';
+if ~exist('outputPath', 'var')
+    outputPath = 'BrightnessAnalysis.mat';
+end
+
 if ~strcmp(pwd, strcat(settings.matlabpath, 'Analysis'))
    fprintf('Warning: analysis script not run from Analysis directory, accouting for this in output path!\n')
-   outputPath = [settings.matlabpath, 'Analysis/BrightnessAnalysis.mat'];
+   outputPath = [settings.matlabpath, 'Analysis/', outputPath];
 end
 
 % Load the video files and trial information from another file
@@ -107,6 +115,18 @@ for i=1: length(trials)
         
         % Converting the frame to gray-scale yields better results
         currentFrameGrayScale = rgb2gray(currentFrame);
+        
+        % If it was specified, pass the image through the force chain
+        % highlighting algorithm (see IdentifyForceChains for more info)
+        if highlightForceChains
+            % Only apply the corrective gradient to the parabolic trials, since the
+            % lighting wasn't uniform
+            if trials(i).gravity ~= "Earth"
+                currentFrameGrayScale = IdentifyForceChains(currentFrameGrayScale, ["CorrectLightGradient", -45]);
+            else
+                currentFrameGrayScale = IdentifyForceChains(currentFrameGrayScale);
+            end
+        end
         
         % The indexing is to account for the spatial cropping as defined by
         % minWidth and minHeight
