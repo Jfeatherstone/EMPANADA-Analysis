@@ -1,9 +1,13 @@
-function EarthMaxLoadBrightness(matFileContainingTrials)
+function EarthMaxLoadBrightness(matFileContainingTrials, saveFigs)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
    matFileContainingTrials = 'Analysis/BrightnessAnalysis.mat';
    fprintf('Warning: file list not provided, defaulting to %s\n', matFileContainingTrials);
+end
+
+if ~exist('saveFigs', 'var')
+   saveFigs = false; 
 end
 
 % Load in our trials var
@@ -161,7 +165,9 @@ title('Maximum Load via Brightness (Earth)');
 %legend(["Day " + (min(earthDays):max(earthDays)), 'Average']);
 legend()
 
-saveFileNameNoExtension = 'Earth-MaxLoad';
-printfig(4, saveFileNameNoExtension);
+if saveFigs
+    saveFileNameNoExtension = 'Earth-MaxLoad';
+    printfig(4, saveFileNameNoExtension);
+end
 
 end

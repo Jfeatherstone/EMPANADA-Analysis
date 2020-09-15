@@ -1,4 +1,4 @@
-function MaxLoadBrightnessEarth(matFileContainingTrials)
+function MaxLoadBrightness(matFileContainingTrials, saveFigs)
 % This file is very similar to MaxLoadBrightness but it focuses only on the
 % Earth data since we have to do a little extra manipulation there. We do
 % this because we want to group the data together by probe flexibility as
@@ -9,6 +9,10 @@ function MaxLoadBrightnessEarth(matFileContainingTrials)
 if ~exist('matFileContainingTrials', 'var')
    matFileContainingTrials = 'Analysis/BrightnessAnalysis.mat';
    fprintf('Warning: file list not provided, defaulting to %s\n', matFileContainingTrials);
+end
+
+if ~exist('saveFigs', 'var')
+   saveFigs = false; 
 end
 
 % Load in our trials var
@@ -191,9 +195,10 @@ title('Maximum Load via Brightness (Lunar)');
 % ie. "Day " + [1, 2, 3] = ["Day 1", "Day 2", "Day 3"]
 legend(["Day " + (min(lunarDays):max(lunarDays)), "Average"]);
 
-saveFileNameNoExtension = 'Lunar-MaxLoad';
-printfig(1, saveFileNameNoExtension);
-
+if saveFigs
+    saveFileNameNoExtension = 'Lunar-MaxLoad';
+    printfig(1, saveFileNameNoExtension);
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         MARTIAN
@@ -215,8 +220,11 @@ title('Maximum Load via Brightness (Martian)');
 % ie. "Day " + [1, 2, 3] = ["Day 1", "Day 2", "Day 3"]
 legend(["Day " + (min(martianDays):max(martianDays)), "Average"]);
 
-saveFileNameNoExtension = 'Martian-MaxLoad';
-printfig(2, saveFileNameNoExtension);
+if saveFigs
+    saveFileNameNoExtension = 'Martian-MaxLoad';
+    printfig(2, saveFileNameNoExtension);
+end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         MICRO
@@ -232,8 +240,11 @@ ylabel('Maximum Brightness [a.u.]');
 title('Maximum Load via Brightness (Micro)');
 legend("Day " + (min(microDays):max(microDays)));
 
-saveFileNameNoExtension = 'Micro-MaxLoad';
-printfig(3, saveFileNameNoExtension);
+if saveFigs
+    saveFileNameNoExtension = 'Micro-MaxLoad';
+    printfig(3, saveFileNameNoExtension);
+end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %         EARTH
@@ -252,8 +263,10 @@ ylabel('Maximum Brightness [a.u.]');
 title('Maximum Load via Brightness (Earth)');
 legend(["Day " + (min(earthDays):max(earthDays)), 'Average']);
 
-saveFileNameNoExtension = 'Earth-MaxLoad';
-printfig(4, saveFileNameNoExtension);
+if saveFigs
+    saveFileNameNoExtension = 'Earth-MaxLoad';
+    printfig(4, saveFileNameNoExtension);
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -275,7 +288,9 @@ ylabel('Maximum Brightness [a.u.]');
 %title('Maximum Load By Gravity via Brightness');
 xlim([0, 12.5]);
 legend()
-saveFileNameNoExtension = 'All-MaxLoad';
-printfig(5, saveFileNameNoExtension);
 
+if saveFigs
+    saveFileNameNoExtension = 'All-MaxLoad';
+    printfig(5, saveFileNameNoExtension);
+end
 end

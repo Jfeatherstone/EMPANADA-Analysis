@@ -1,9 +1,13 @@
-function SlipCounting(matFileContainingTrials)
+function SlipCounting(matFileContainingTrials, saveFigs)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
    matFileContainingTrials = 'Analysis/BrightnessAnalysis.mat';
    fprintf('Warning: file list not provided, defaulting to %s\n', matFileContainingTrials);
+end
+
+if ~exist('saveFigs', 'var')
+   saveFigs = false; 
 end
 
 % Load in our trials var
@@ -77,10 +81,10 @@ startup;
 % to find similar values should be looked into. It makes sense to keep all
 % of the values the same, though I'll keep the variable separate for now,
 % just in case :/
-lunarMinPeakHeight = .05;
-martianMinPeakHeight = .05;
-microMinPeakHeight = .05;
-earthMinPeakHeight = .05;
+lunarMinPeakHeight = .25;
+martianMinPeakHeight = .25;
+microMinPeakHeight = .25;
+earthMinPeakHeight = .25;
 
 % The number of seconds that must pass between slip events being detected
 minPeakDistance = .5;
@@ -186,8 +190,12 @@ title('Slipping events vs. probe speed (Lunar)');
 xlim([0, 12]);
 ylim([max(min(lunarNumPeaks-1), 0), max(lunarNumPeaks)+1]);
 legend()
-saveFileNameNoExtension = 'Lunar-SlipCounting';
-printfig(1, saveFileNameNoExtension);
+
+if saveFigs
+    saveFileNameNoExtension = 'Lunar-SlipCounting';
+    printfig(1, saveFileNameNoExtension);
+end
+
 
 figure(2);
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
@@ -201,8 +209,12 @@ title('Slipping events vs. probe speed (Martian)');
 xlim([0, 12]);
 ylim([0, max(martianNumPeaks)+1]);
 legend()
-saveFileNameNoExtension = 'Martian-SlipCounting';
-printfig(2, saveFileNameNoExtension);
+
+if saveFigs
+    saveFileNameNoExtension = 'Martian-SlipCounting';
+    printfig(2, saveFileNameNoExtension);
+end
+
 
 figure(3);
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
@@ -217,8 +229,12 @@ xlim([0, 12]);
 ylim([0, max(microNumPeaks)+1]);
 legend()
 %saveFileNameNoExtension = ['Micro-SlipCounting-', num2str(microMinPeakHeight)];
-saveFileNameNoExtension = 'Micro-SlipCounting';
-printfig(3, saveFileNameNoExtension);
+
+if saveFigs
+    saveFileNameNoExtension = 'Micro-SlipCounting';
+    printfig(3, saveFileNameNoExtension);
+end
+
 
 figure(4);
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
@@ -233,9 +249,11 @@ title('Slipping events vs. probe speed (Earth)');
 xlim([0, 12]);
 ylim([0, max(earthNumPeaks)+1]);
 legend()
-saveFileNameNoExtension = 'Earth-SlipCounting';
-printfig(4, saveFileNameNoExtension);
 
+if saveFigs
+    saveFileNameNoExtension = 'Earth-SlipCounting';
+    printfig(4, saveFileNameNoExtension);
+end
 % Now lets plot everything on the same figure.
 figure(5);
 hold on;
@@ -257,8 +275,10 @@ legend()
 %text(140, 14, 'Lunar, $g \approx \frac{1}{6} g_{Earth}$', 'Interpreter', 'latex', 'Color', settings.colors('Lunar'));
 %text(110, 7, 'Micro, $g \approx .001 g_{Earth}$', 'Interpreter', 'latex', 'Color', settings.colors('Micro'));
 
-saveFileNameNoExtension = 'All-SlipCounting';
-printfig(5, saveFileNameNoExtension);
+if saveFigs
+    saveFileNameNoExtension = 'All-SlipCounting';
+    printfig(5, saveFileNameNoExtension);
+end
 
 end
 
