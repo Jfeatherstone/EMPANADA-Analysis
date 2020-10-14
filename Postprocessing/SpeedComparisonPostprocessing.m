@@ -40,6 +40,7 @@ startup;
 microGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 martianGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 lunarGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
+earthGravityTrials = struct('day', {}, 'gravity', {}, 'speed', {}, 'fileName', {}, 'cropTimes', {}, 'results', {});
 
 for i=1: length(trials)
     switch trials(i).gravity
@@ -51,6 +52,9 @@ for i=1: length(trials)
     
         case 'Micro'
             microGravityTrials(length(microGravityTrials) + 1) = trials(i);
+        
+        case 'Earth'
+            earthGravityTrials(length(earthGravityTrials) + 1) = trials(i);
     end
 
 end
@@ -143,6 +147,35 @@ microSpeeds = zeros(1, length(microGravityTrials));
 
 for i=1: length(microGravityTrials)
    microSpeeds(i) = microGravityTrials(i).speed;
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       EARTH CLEANUP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i=1: length(earthGravityTrials)
+   earthGravityTrials(i).speed = str2double(earthGravityTrials(i).speed);
+end
+
+[~, index] = sort([earthGravityTrials.speed], 'ascend');
+earthGravityTrials = earthGravityTrials(index);
+
+allEarthBrightnessData = [];
+%allMicroGSquaredData = [];
+for i=1: length(lunarGravityTrials)
+   allEarthBrightnessData = [allEarthBrightnessData, earthGravityTrials(i).results.averageBrightness - mean(earthGravityTrials(i).results.averageBrightness)]; 
+   %allMicroGSquaredData = [allMicroGSquaredData, microGravityTrials(i).results.averageGSquared - mean(microGravityTrials(i).results.averageGSquared)]; 
+end
+
+earthBrightnessNormalization = max(allEarthBrightnessData);
+%microGSquaredNormalization = max(allMicroGSquaredData);
+% Now that we have them separated and sorted, we can graph all of them
+
+% We don't need to record the days for micro as they are all from day 1
+earthSpeeds = zeros(1, length(earthGravityTrials));
+
+for i=1: length(earthGravityTrials)
+   earthSpeeds(i) = earthGravityTrials(i).speed;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -376,5 +409,43 @@ hold off
 % % (printfig.m)
 % printfig(6, saveFileNameNoExtension);
 % hold off
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     EARTH BRIGHTNESS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% We don't want graphs to overlap, so we put an offset in here
+offsetFactor = 2 / length(earthGravityTrials);
+
+figure(6);
+hold on;
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+xlabel('Probe displacement [mm]');
+ylabel('Average brightness [arb. units]');
+title('Speed Comparison of Probe in Earth Gravity')
+% Since we have weird units, we don't need y ticks
+set(gca,'ytick',[]);
+set(gca,'yticklabel',[]);
+% We don't want to auto adjust our axis limits since we want to not
+% have any of the graphs be on top of each other
+%ylim([-1, 1]);
+legend();
+
+for i=1: length(earthGravityTrials)
+    brightnessData = (earthGravityTrials(i).results.averageBrightness - mean(earthGravityTrials(i).results.averageBrightness));
+    brightnessData = brightnessData / (earthBrightnessNormalization * length(earthGravityTrials));
+    % Now account for our offset
+    % I kinda just messed around with this formula until it looked good, so
+    % there's no real reason why it looks like this :/
+    brightnessData = brightnessData - 1 + (2*(earthSpeeds(i)/max(earthSpeeds) - 1)) * offsetFactor;
+    plot(earthGravityTrials(i).results.frameTime * earthSpeeds(i), brightnessData, 'DisplayName', [num2str(earthGravityTrials(i).speed), ' mm/s']);
+
+end
+% Now save the figure
+saveFileNameNoExtension = 'Earth-SpeedComparisonBrightness';
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(6, saveFileNameNoExtension);
+hold off
 
 end % Function end

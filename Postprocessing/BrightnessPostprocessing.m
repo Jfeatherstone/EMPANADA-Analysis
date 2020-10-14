@@ -171,13 +171,13 @@ for i=1: length(trials)
     % Normalize; see note about normalization above with brightness
     brightnessDerivativeAbsData = AverageDownsample(abs(trials(i).results.averageBrightnessDerivative), downsampleFactor);
     brightnessDerivativeAbsData(brightnessDerivativeAbsData < noiseThreshhold) = brightnessDerivativeAbsData(brightnessDerivativeAbsData < noiseThreshhold) / 10.;
-    plot(AverageDownsample(trials(i).results.frameTime, downsampleFactor), brightnessDerivativeAbsData, 'Color', brightnessDerivativeLineColor);
+    plot(AverageDownsample(trials(i).results.frameTime, downsampleFactor), brightnessDerivativeAbsData, 'Color', settings.colors(trials(i).gravity));
     
     % Create the title
-    title(titleStr);
+    %title(titleStr);
     
     xlabel('Time [s]');
-    ylabel('|d/dt of average brightness| [a.u.]');
+    ylabel('|d/dt brightness| [a.u.]');
     % Since we have weird units, we don't need y ticks, but we'll leave
     % them in
     %set(gca,'ytick',[]);

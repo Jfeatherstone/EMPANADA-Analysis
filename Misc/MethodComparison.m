@@ -1,8 +1,6 @@
 load("Misc/MethodComparison.mat")
 
-%drawArrow = @(x,y,varargin) quiver( x(1),y(1),x(2)-x(1),y(2)-y(1),0, varargin{:} );
-
-
+%drawArrow = @(x,y,varargin) quiver( x(1),y(1),x(2)-x(1),y(2)-y(1),0, varargin{:} )
 
 arrowColors = ["#f40a0a", "#f4710a", "#33ae06", "#6796f3", "#8126d0"];
 brightnessArrowXPositions = [2.1, 3.5, 4.9, 6.66, 7.96];
@@ -36,7 +34,7 @@ for i=1: length(brightnessArrowXPositions)
 end
 
 % No xlabel since this graph goes on top of the other
-%xlabel('Time [s]');
+xlabel('Time [s]');
 ylabel('|d/dt brightness| [a.u.]');
 xlim([0, 12])
 ylim([0, .07])

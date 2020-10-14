@@ -61,12 +61,12 @@ for i = 1: length(trials)
     
     data = trials(i).results.forceData(startIndex:endIndex);
     time = trials(i).results.frameTime(startIndex:endIndex) - trials(i).results.frameTime(startIndex);
-    plot(time, data);
+    plot(time, data, 'Color', settings.colors('Earth-alt'));
     xlabel('Time [s]');
-    ylabel('Load Cell Reading [a.u.]');
+    ylabel('Load cell reading [a.u.]');
     % Create the title
-    titleStr = ['Day ', num2str(trials(i).day), ', speed=', trials(i).speed, 'mm/s, gravity=', trials(i).gravity];
-    title(titleStr);
+    %titleStr = ['Day ', num2str(trials(i).day), ', speed=', trials(i).speed, 'mm/s, gravity=', trials(i).gravity];
+    %title(titleStr);
     
     % Now save the figure
     saveFileNameNoExtension = ['Day', num2str(trials(i).day), '-', trials(i).gravity, '-', trials(i).speed, 'mms-ForceData'];

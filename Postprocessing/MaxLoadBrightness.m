@@ -37,8 +37,8 @@ global settings
 
 
 % Set our figure sizes
-figureWidth = 720;
-figureHeight = 480;
+figureWidth = 540;
+figureHeight = 400;
 
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
@@ -276,15 +276,21 @@ figure(5);
 hold on;
 set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 
-%yyaxis left
+yyaxis right
+ylabel('Maximum Brightness [a.u.]');
+set(gca, 'YColor', settings.colors('Earth'))
+
+errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth'), 'LineWidth', 1.5, 'DisplayName', 'Earth');
+
+yyaxis left
+ylabel('Maximum Brightness [a.u.]');
+set(gca, 'YColor', '#000000')
+
 errorbar(cell2mat(martianAverageMaximaBySpeed.keys), cell2mat(martianAverageMaximaBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
-errorbar(cell2mat(lunarAverageMaximaBySpeed.keys), cell2mat(lunarAverageMaximaBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar');
-errorbar(cell2mat(microAverageMaximaBySpeed.keys), cell2mat(microAverageMaximaBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
-%yyaxis right
-%errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
+errorbar(cell2mat(lunarAverageMaximaBySpeed.keys), cell2mat(lunarAverageMaximaBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar', 'LineStyle', '-');
+%errorbar(cell2mat(microAverageMaximaBySpeed.keys), cell2mat(microAverageMaximaBySpeed.values), cell2mat(microErrorBarsBySpeed.values), 'Color', settings.colors('Micro'), 'LineWidth', 1.5, 'DisplayName', 'Micro');
 
 xlabel('Probe speed [mm/s]');
-ylabel('Maximum Brightness [a.u.]');
 %title('Maximum Load By Gravity via Brightness');
 xlim([0, 12.5]);
 legend()
