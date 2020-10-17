@@ -94,7 +94,7 @@ while hasFrame(video)
     s1 = subplot(2, 1, 1);
     % Set the position so that the overall result looks nice
     % See help on 'Position' to specifically see what the values mean
-    set(s1, 'Position', [.11, .5, .84, .45]);
+    set(s1, 'Position', [.11, .52, .84, .45]);
     
     % Draw all of the data
     linePlot1 = plot(Xdata, Y1data, 'Color', settings.colors(trials(trialNum).gravity));

@@ -58,14 +58,16 @@ set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 title(['Average Brightness by Gravity (', trials(lunarTrial).speed, ' mm/s)'])
 xlabel('Probe position [mm]');
 ylabel('Average brightness [a.u.]');
+yticks([])
 
-plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
-plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
-plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageBrightness, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
+plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageBrightness + 15, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
+plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageBrightness + 5, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
+plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageBrightness - 5, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
 
-legend()
+legend('Location', 'southeast')
 
 printfig((length(trials) + 1) * 4, 'SampleBrightnessComparison');
+return
 
 for i=1: length(trials)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

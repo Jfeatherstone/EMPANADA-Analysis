@@ -33,7 +33,7 @@ figure(1);
 
 % The number of the trial that we are looking to analyze
 % This can later be changed to iterate over trialNum very easily
-trialNum = 3;
+trialNum = 4;
 video = VideoReader([settings.datapath, trials(trialNum).fileName]);
 
 % Set the size of our figure (note that this is a tall figure)
@@ -102,7 +102,7 @@ while hasFrame(video)
     s1 = subplot(2, 1, 1);
     % Set the position so that the overall result looks nice
     % See help on 'Position' to specifically see what the values mean
-    set(s1, 'Position', [.11, .5, .84, .45]);
+    set(s1, 'Position', [.11, .52, .84, .45]);
     
     % Draw all of the data
     linePlot1 = plot(Xdata, Y1data, 'Color', settings.colors(trials(trialNum).gravity));
