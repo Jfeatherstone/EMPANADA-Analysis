@@ -45,6 +45,7 @@ noiseThreshhold = .04;
 
 % Also create a sample graph with a trial from each gravity at the same
 % speed
+
 figure((length(trials) + 1) * 4);
 hold on;
 
@@ -58,15 +59,16 @@ set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 title(['Average Brightness by Gravity (', trials(lunarTrial).speed, ' mm/s)'])
 xlabel('Probe position [mm]');
 ylabel('Average brightness [a.u.]');
-yticks([])
+%yticks([])
 
-plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageBrightness + 15, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
-plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageBrightness + 5, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
-plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageBrightness - 5, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
+plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageBrightness, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
+plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
+plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
 
-legend('Location', 'southeast')
+legend('Location', 'northeast')
 
 printfig((length(trials) + 1) * 4, 'SampleBrightnessComparison');
+savePDF('SampleBrightnessComparison');
 return
 
 for i=1: length(trials)

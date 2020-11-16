@@ -42,7 +42,7 @@ figureHeight = 400;
 
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
-settings.charfrac = .55;
+settings.charfrac = .6;
 startup;
 
 % First, convert speed to numbers instead of strings
@@ -279,12 +279,14 @@ set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 yyaxis right
 ylabel('Maximum Brightness [a.u.]');
 set(gca, 'YColor', settings.colors('Earth'))
+yticks([])
 
 errorbar(cell2mat(earthAverageMaximaBySpeed.keys), cell2mat(earthAverageMaximaBySpeed.values), cell2mat(earthErrorBarsBySpeed.values), 'Color', settings.colors('Earth'), 'LineWidth', 1.5, 'DisplayName', 'Earth');
 
 yyaxis left
 ylabel('Maximum Brightness [a.u.]');
 set(gca, 'YColor', '#000000')
+yticks([])
 
 errorbar(cell2mat(martianAverageMaximaBySpeed.keys), cell2mat(martianAverageMaximaBySpeed.values), cell2mat(martianErrorBarsBySpeed.values), 'Color', settings.colors('Martian'), 'LineWidth', 1.5, 'DisplayName', 'Martian');
 errorbar(cell2mat(lunarAverageMaximaBySpeed.keys), cell2mat(lunarAverageMaximaBySpeed.values), cell2mat(lunarErrorBarsBySpeed.values), 'Color', settings.colors('Lunar'), 'LineWidth', 1.5, 'DisplayName', 'Lunar', 'LineStyle', '-');
@@ -298,5 +300,6 @@ legend()
 if saveFigs
     saveFileNameNoExtension = 'All-MaxLoad';
     printfig(5, saveFileNameNoExtension);
+    savePDF('All-MaxLoad')
 end
 end

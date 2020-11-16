@@ -226,6 +226,7 @@ saveFileNameNoExtension = 'Lunar-SpeedComparisonBrightness';
 % This is a custom figure saving method, see file for more info
 % (printfig.m)
 printfig(1, saveFileNameNoExtension);
+savePDF(saveFileNameNoExtension)
 hold off
 
 

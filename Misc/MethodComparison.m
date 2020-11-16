@@ -34,7 +34,7 @@ for i=1: length(brightnessArrowXPositions)
 end
 
 % No xlabel since this graph goes on top of the other
-xlabel('Time [s]');
+%xlabel('Time [s]');
 ylabel('|d/dt brightness| [a.u.]');
 xlim([0, 12])
 ylim([0, .07])
@@ -44,7 +44,8 @@ set(gcf,'visible','off')
 % Now save the figure
 % This is a custom figure saving method, see file for more info
 % (printfig.m)
-printfig(1, 'BrightnessMethodComparison');
+printfig(1, 'MethodComparison-Brightness');
+savePDF('MethodComparison-Brightness')
 
 figure(2);
 hold on;
@@ -67,7 +68,8 @@ set(gcf,'visible','off')
 % Now save the figure
 % This is a custom figure saving method, see file for more info
 % (printfig.m)
-printfig(2, 'ForceMethodComparison');
+printfig(2, 'MethodComparison-Force');
+savePDF('MethodComparison-Force')
 
 % From: https://stackoverflow.com/questions/25729784/how-to-draw-an-arrow-in-matlab
 function drawArrow(x, y, props)

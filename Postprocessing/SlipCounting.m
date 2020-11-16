@@ -74,7 +74,7 @@ figureWidth = 540;
 figureHeight = 400;
 
 % Adjust the font to be a little smaller, and rerun our startup
-settings.charfrac = .55;
+settings.charfrac = .6;
 startup;
 
 % These values are chosen by just looking at the data, a more precise way
@@ -278,6 +278,7 @@ legend()
 if saveFigs
     saveFileNameNoExtension = 'All-SlipCounting';
     printfig(5, saveFileNameNoExtension);
+    savePDF('All-SlipCounting')
 end
 
 end

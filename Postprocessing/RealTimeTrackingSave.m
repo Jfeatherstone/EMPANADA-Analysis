@@ -1,5 +1,9 @@
 
-function recordingFrames = RealTimeTrackingSave(matFileContainingTrials)
+function recordingFrames = RealTimeTrackingSave(matFileContainingTrials, sameWindow)
+
+if ~exist('sameWindow', 'var')
+    sameWindow = 1;
+end
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
@@ -34,6 +38,9 @@ figure(1);
 % The number of the trial that we are looking to analyze
 % This can later be changed to iterate over trialNum very easily
 trialNum = 4;
+% This is the frame we want to save
+% I found this just by looking through the video
+goodI = 271;
 video = VideoReader([settings.datapath, trials(trialNum).fileName]);
 
 % Set the size of our figure (note that this is a tall figure)
@@ -43,7 +50,7 @@ set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
 
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
-settings.charfrac = .65;
+settings.charfrac = .7;
 startup;
 
 % We want to normalize the data to keep things clean (doesn't really matter
@@ -67,7 +74,7 @@ frameTimeDifference = trials(trialNum).results.frameTime(2) - trials(trialNum).r
 
 % Start our index at the beginning as marked by the crop time, this will inevitably skip over a lot of numbers
 % though
-i = 200;
+i = 260;
 
 % Time offset because of the cropping
 % We have to cast to an int to round the number and then back to double
@@ -89,12 +96,16 @@ while hasFrame(video)
     
     % We want to keep track of how long it takes to perform the following
     % actions so that we can keep up with real time
-    
-    % Switch to the first (upper) plot
-    s1 = subplot(2, 1, 1);
-    % Set the position so that the overall result looks nice
-    % See help on 'Position' to specifically see what the values mean
-    set(s1, 'Position', [.11, .52, .84, .45]);
+    if sameWindow
+        % Switch to the first (upper) plot
+        s1 = subplot(2, 1, 1);
+        % Set the position so that the overall result looks nice
+        % See help on 'Position' to specifically see what the values mean
+        set(s1, 'Position', [.11, .52, .84, .45]);
+    else
+        figure(1);
+        set(gcf, 'Position', [0, 0, 720, 480]);
+    end
     
     % Draw all of the data
     linePlot1 = plot(Xdata, Y1data, 'Color', settings.colors(trials(trialNum).gravity));
@@ -107,40 +118,61 @@ while hasFrame(video)
     
     % Highlight the point with a special character and a vertical
     % line (on the same plot)
-    point1 = plot(Xdata(i), Y1data(i), 'b*', 'MarkerSize', 15, 'HandleVisibility', 'off');
+    point1 = plot(Xdata(i), Y1data(i), 'b*', 'MarkerSize', 15, 'Color', settings.colors('Martian-alt'), 'HandleVisibility', 'off');
     %point2 = plot(Xdata(i), Y2data(i), 'm*', 'MarkerSize', 15, 'HandleVisibility', 'off');
-    plot([Xdata(i), Xdata(i)], verticalLineBounds, 'b--', 'HandleVisibility', 'off');
+    plot([Xdata(i), Xdata(i)], verticalLineBounds, 'b--', 'Color', settings.colors('Martian-alt'), 'HandleVisibility', 'off');
 
     % Title and axes
     title(['Brightness Profile of a ', trials(trialNum).gravity, ' Trial'])
     xlabel('Time [s]')
-    ylabel('Average Brightness [arb. units]')
+    ylabel('Average Brightness [a.u.]')
+    yticks([])
     
-    % Now switch back to our second (lower) plot
-    s2 = subplot(2, 1, 2);
-    % Set the position that our overall result looks nice
-    set(s2, 'Position', [.11, .02, .84, .45]);
+    if i == goodI && ~sameWindow
+        % Make the graph not pop up (since we'll be saving it to a file)
+        set(gcf,'visible','off')
+        savePDF('RealTimeSample-Plot') 
+    end
+    hold off
+    
+    if sameWindow
+        % Now switch back to our second (lower) plot
+        s2 = subplot(2, 1, 2);
+        % Set the position that our overall result looks nice
+        set(s2, 'Position', [.11, .02, .84, .45]);
+    else
+        figure(2);
+        set(gcf, 'Position', [0, 0, 720, 480]);
+    end
+    
     hold on
     % Show the current frame
     imshow(currentFrame);
     
     % Draw a scale bar on the image
     % These values are chosen arbitrarily to look nice
-    scaleBarPosition = [170, 240];
-    scaleBarWidth = 40;
-    scaleBarColor = '#ffffff';
-    scaleBarEndLineHeight = 30;
-    plot(scaleBarPosition(1) + [0, scaleBarWidth], scaleBarPosition(2) + [0, 0], '-', 'Color', scaleBarColor)
-    plot(scaleBarPosition(1) + [0, 0], scaleBarPosition(2) + [-scaleBarEndLineHeight * .5, scaleBarEndLineHeight * .5], 'Color', scaleBarColor)
-    plot(scaleBarPosition(1) + scaleBarWidth + [0, 0], scaleBarPosition(2) + [-scaleBarEndLineHeight * .5, scaleBarEndLineHeight * .5], 'Color', scaleBarColor)
-    annotation('textbox', [.15, .25, .1, .1], 'String', '1 cm', 'Color', scaleBarColor, 'LineStyle', 'none');
+%     scaleBarPosition = [170, 240];
+%     scaleBarWidth = 40;
+%     scaleBarColor = '#ffffff';
+%     scaleBarEndLineHeight = 30;
+%     plot(scaleBarPosition(1) + [0, scaleBarWidth], scaleBarPosition(2) + [0, 0], '-', 'Color', scaleBarColor)
+%     plot(scaleBarPosition(1) + [0, 0], scaleBarPosition(2) + [-scaleBarEndLineHeight * .5, scaleBarEndLineHeight * .5], 'Color', scaleBarColor)
+%     plot(scaleBarPosition(1) + scaleBarWidth + [0, 0], scaleBarPosition(2) + [-scaleBarEndLineHeight * .5, scaleBarEndLineHeight * .5], 'Color', scaleBarColor)
+%     annotation('textbox', [.15, .25, .1, .1], 'String', '1 cm', 'Color', scaleBarColor, 'LineStyle', 'none');
+    
+    if i == goodI && ~sameWindow
+       savePDF('RealTimeSample-Frame');
+       return;
+    end
     
     if i * frameTimeDifference >= croppedDuration
         break;
     end
     video.CurrentTime = i * frameTimeDifference + croppedStartTime;
     
-    recordingFrames(i) = getframe(gcf);
+    if sameWindow
+        recordingFrames(i) = getframe(gcf);
+    end
     
     % Clear the graphs
     hold off

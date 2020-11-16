@@ -122,7 +122,7 @@ while hasFrame(video)
     % Title and axes
     title(['Brightness Profile of a ', trials(trialNum).gravity, ' Trial'])
     xlabel('Time [s]')
-    ylabel('Average Brightness [arb. units]')
+    ylabel('Average Brightness [a.u.]')
     
     % Now switch back to our second (lower) plot
     s2 = subplot(2, 1, 2);

@@ -15,7 +15,7 @@ if strcmp(getenv('HOST'), myLaptopHostName)
     settings.fig_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-fig/'];
     settings.avi_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-avi/'];
 
-    settings.datapath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Proper/'];
+    settings.datapath = ['/home/run/media/', username, 'Seagate\ Portable\ Drive/Research/EMPANADA-Proper/'];
     settings.matlabpath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/'];
 else
     fprintf('Detected system: lab computer. Adjusting settings appropriately...\n');
