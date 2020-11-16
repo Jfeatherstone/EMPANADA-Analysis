@@ -50,7 +50,7 @@ figure((length(trials) + 1) * 4);
 hold on;
 
 % I've chosen these by just examining the trial list
-% They're all 70mms trials
+% They're all 8.5 mm/s trials (which is what used to be called 210 mm/s)
 lunarTrial = 1;
 martianTrial = 5;
 microTrial = 19;
@@ -61,6 +61,7 @@ xlabel('Probe position [mm]');
 ylabel('Average brightness [a.u.]');
 %yticks([])
 
+% Multiply by the correct speed (8.5) to convert time to position
 plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageBrightness, 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
 plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageBrightness, 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
 plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageBrightness, 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
