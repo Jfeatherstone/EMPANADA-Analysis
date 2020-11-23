@@ -3,7 +3,7 @@ function BrightnessPostprocessing(matFileContainingTrials)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
-   matFileContainingTrials = 'Analysis/BrightnessAnalysis.mat';
+   matFileContainingTrials included= 'Analysis/BrightnessAnalysis.mat';
    fprintf('Warning: file list not provided, defaulting to %s\n', matFileContainingTrials);
 end
 
