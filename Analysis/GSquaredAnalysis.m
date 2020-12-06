@@ -33,7 +33,7 @@ end
 
 if ~strcmp(pwd, strcat(settings.matlabpath, 'Analysis'))
    fprintf('Warning: analysis script not run from Analysis directory, accouting for this in output path!\n')
-   outputPath = [settings.matlabpath, 'Analysis/GSquaredAnalysis.mat'];
+   outputPath = [settings.matlabpath, 'Analysis/', outputPath];
 end
 
 % Load the video files and trial information from another file
@@ -49,18 +49,18 @@ load(matFileContainingTrials, 'trials')
 % to make sure that the same number of pixels is sampled regardless
 
 % Initialize as an arbitrarily high number
-% minWidth = 10000;
-% minHeight = 10000;
-% 
-% % I don't believe there's a faster way to do this, unfortunately
-% for i=1: length(trials)
-%     currentVideo = VideoReader([settings.datapath, trials(i).fileName]);
-%     minWidth = min(minWidth, currentVideo.Width);
-%     minHeight = min(minHeight, currentVideo.Height);
-% end
+minWidth = 10000;
+minHeight = 10000;
 
-minWidth = 640;
-minHeight = 480;
+% I don't believe there's a faster way to do this, unfortunately
+for i=1: length(trials)
+    currentVideo = VideoReader([settings.datapath, trials(i).fileName]);
+    minWidth = min(minWidth, currentVideo.Width);
+    minHeight = min(minHeight, currentVideo.Height);
+end
+
+%minWidth = 640;
+%minHeight = 480;
 
 fprintf('Found minimum video dimensions %i x %i, videos will be cropped to this size.\n', minWidth, minHeight);
 
