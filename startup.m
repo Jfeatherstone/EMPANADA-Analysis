@@ -5,29 +5,29 @@
 global settings;
 
 % This file decides which machine you are on based on the host name
-myLaptopHostName = "ArchMSI";
+settings.myLaptopHostName = "ArchMSI";
 
-if strcmp(getenv('HOST'), myLaptopHostName)
+if strcmp(getenv('HOST'), settings.myLaptopHostName)
     fprintf('Detected system: personal laptop. Adjusting settings appropriately...\n');
     % set up where to read/save data
-    username = 'jack';
-    settings.png_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-png/'];
-    settings.fig_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-fig/'];
-    settings.avi_savepath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-avi/'];
+    settings.username = 'jack';
+    settings.png_savepath = ['/home/', settings.username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-png/'];
+    settings.fig_savepath = ['/home/', settings.username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-fig/'];
+    settings.avi_savepath = ['/home/', settings.username, '/workspaces/matlab-workspace/EMPANADA-Analysis/Output-avi/'];
 
     %settings.datapath = ['/run/media/', username, '/Seagate\ Portable\ Drive/Research/EMPANADA-Proper/'];
-    settings.datapath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Proper/Research/EMPANADA-Proper/'];
-    settings.matlabpath = ['/home/', username, '/workspaces/matlab-workspace/EMPANADA-Analysis/'];
+    settings.datapath = ['/home/', settings.username, '/workspaces/matlab-workspace/EMPANADA-Proper/Research/EMPANADA-Proper/'];
+    settings.matlabpath = ['/home/', settings.username, '/workspaces/matlab-workspace/EMPANADA-Analysis/'];
 else
     fprintf('Detected system: lab computer. Adjusting settings appropriately...\n');
     % set up where to read/save data
-    username = 'jdfeathe';
-    settings.png_savepath = ['/eno/', username, '/EMPANADA-Analysis/Output-png/'];
-    settings.fig_savepath = ['/eno/', username, '/EMPANADA-Analysis/Output-fig/'];
-    settings.avi_savepath = ['/eno/', username, '/EMPANADA-Analysis/Output-avi/'];
+    settings.username = 'jdfeathe';
+    settings.png_savepath = ['/eno/', settings.username, '/EMPANADA-Analysis/Output-png/'];
+    settings.fig_savepath = ['/eno/', settings.username, '/EMPANADA-Analysis/Output-fig/'];
+    settings.avi_savepath = ['/eno/', settings.username, '/EMPANADA-Analysis/Output-avi/'];
 
-    settings.datapath = ['/eno/', username, '/DATA/EMPANADA-Proper/'];
-    settings.matlabpath = ['/eno/', username, '/EMPANADA-Analysis/'];
+    settings.datapath = ['/eno/', settings.username, '/DATA/EMPANADA-Proper/'];
+    settings.matlabpath = ['/eno/', settings.username, '/EMPANADA-Analysis/'];
 end
 
 % And setup some variables that are the same for both machines

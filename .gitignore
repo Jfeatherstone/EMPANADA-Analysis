@@ -2,3 +2,8 @@
 *.m~
 # Ignore all avi files since they're too big to store on github
 *.avi
+
+# Ignore the pictures except pdfs
+Output-png/*
+Output-fig/*
+Output-avi/*

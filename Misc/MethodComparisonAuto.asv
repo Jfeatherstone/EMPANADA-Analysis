@@ -1,0 +1,157 @@
+
+brightnessMatFile = 'Analysis/BrightnessAnalysisAllEdited.mat';
+gSquaredMatFile = 'Analysis/GSquaredAnalysisAllEdited.mat';
+forceMatFile = 'Preprocessing/ForceData.mat';
+
+% Load in the data
+load(brightnessMatFile, 'trials');
+bTrials = trials;
+
+load(gSquaredMatFile, 'trials');
+gTrials = trials;
+
+load(forceMatFile, 'trials');
+fTrials = trials;
+
+% Set our figure sizes
+figureWidth = 1080;
+figureHeight = 720;
+
+% Loop over all possible days and speeds
+possibleDays = [3, 4, 6, 7, 8, 9, 10, 11];
+possibleSpeeds = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+for i = 1: length(possibleDays)
+    trialDay = possibleDays(i);
+    for j = 1: length(possibleSpeeds)
+        trialSpeed = possibleSpeeds(j);
+        
+        [brightnessIndex, ] = intersect(find([bTrials(:).day] == trialDay), find([convertCharsToStrings({bTrials.speed})] == num2str(trialSpeed)));
+        [gSquaredIndex, ] = intersect(find([gTrials(:).day] == trialDay), find([convertCharsToStrings({gTrials.speed})] == num2str(trialSpeed)));
+        [forceIndex, ] = intersect(find([fTrials(:).day] == trialDay), find([convertCharsToStrings({fTrials.speed})] == num2str(trialSpeed)));
+
+        
+        figure(i*(length(possibleSpeeds)+1) + j);
+        hold on;
+
+        set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+
+        plot(bTrials(brightnessIndex).results.frameTime, abs(bTrials(brightnessIndex).results.averageBrightnessDerivative) / max(abs(bTrials(brightnessIndex).results.averageBrightnessDerivative)), 'Color', settings.colors("Earth"), 'DisplayName', 'd/dt \langle Brightness \rangle');
+        plot(gTrials(gSquaredIndex).results.frameTime, gTrials(gSquaredIndex).results.averageGSquared / max(gTrials(gSquaredIndex).results.averageGSquared), 'Color', settings.colors("Earth-alt"), 'DisplayName', '\langle G^2 \rangle');
+        plot(fTrials(forceIndex).results.frameTime, fTrials(forceIndex).results.forceData / max(fTrials(forceIndex).results.forceData), 'Color', settings.colors("Micro-alt"), 'DisplayName', 'Load Cell');
+
+        xlabel('Time [s]');
+        legend()
+
+        set(gcf,'visible','off')
+        fileName = ['MethodComparison-Day-', num2str(trialDay), '-', num2str(trialSpeed), 'mm/s'];
+        printfig(i*(length(possibleSpeeds)+1) + j, fileName);
+        savePDF(fileName);
+
+    end
+    
+end
+
+
+% Adjust the font to be a little smaller, and rerun our startuparrowLength
+settings.charfrac = .7;
+startup;
+
+figure(1);
+hold on;
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+
+plot(bTrials(brightnessIndex).results.frameTime, abs(bTrials(brightnessIndex).results.averageBrightnessDerivative), 'Color', settings.colors("Earth"));
+
+%for i=1: length(brightnessArrowXPositions)
+%    drawArrow([brightnessArrowXPositions(i), brightnessArrowXPositions(i)], [brightnessArrowYPositions(i) + arrowLength/2., brightnessArrowYPositions(i) - arrowLength/2.], {'Color', arrowColors(i)})
+%end
+
+% No xlabel since this graph goes on top of the other
+xlabel('Time [s]');
+ylabel('|d/dt \langle Brightness \rangle|');
+%xlim([0, 12])
+%ylim([0, .07])
+% Make the graph not pop up (since we'll be saving it to a file)
+set(gcf,'visible','off')
+
+% Now save the figure
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(1, 'MethodComparison-Brightness');
+savePDF('MethodComparison-Brightness')
+
+figure(2);
+hold on;
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+
+plot(gTrials(gSquaredIndex).results.frameTime, gTrials(gSquaredIndex).results.averageGSquared, 'Color', settings.colors("Earth-alt"));
+
+%for i=1: length(forceArrowXPositions)
+%    drawArrow([forceArrowXPositions(i), forceArrowXPositions(i)], [forceArrowYPositions(i) + arrowLength/2., forceArrowYPositions(i) - arrowLength/2.], {'Color', arrowColors(i)})
+%end
+
+xlabel('Time [s]');
+ylabel('\langle G^2 \rangle');
+%xlim([0, 12])
+%ylim([250, 600])
+% Make the graph not pop up (since we'll be saving it to a file)
+set(gcf,'visible','off')
+
+% Now save the figure
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(2, 'MethodComparison-GSquared');
+savePDF('MethodComparison-GSquared');
+
+figure(3);
+hold on;
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+
+plot(fTrials(forceIndex).results.frameTime, fTrials(forceIndex).results.forceData, 'Color', settings.colors("Earth-alt"));
+
+%for i=1: length(forceArrowXPositions)
+%    drawArrow([forceArrowXPositions(i), forceArrowXPositions(i)], [forceArrowYPositions(i) + arrowLength/2., forceArrowYPositions(i) - arrowLength/2.], {'Color', arrowColors(i)})
+%end
+
+
+xlabel('Time [s]');
+ylabel('Load Cell Reading');
+%xlim([0, 12])
+%ylim([250, 600])
+% Make the graph not pop up (since we'll be saving it to a file)
+set(gcf,'visible','off')
+
+% Now save the figure
+% This is a custom figure saving method, see file for more info
+% (printfig.m)
+printfig(3, 'MethodComparison-Force');
+savePDF('MethodComparison-Force');
+
+figure(4);
+hold on;
+
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+
+plot(bTrials(brightnessIndex).results.frameTime, abs(bTrials(brightnessIndex).results.averageBrightnessDerivative) / max(abs(bTrials(brightnessIndex).results.averageBrightnessDerivative)), 'Color', settings.colors("Earth"), 'DisplayName', 'd/dt \langle Brightness \rangle');
+plot(gTrials(gSquaredIndex).results.frameTime, gTrials(gSquaredIndex).results.averageGSquared / max(gTrials(gSquaredIndex).results.averageGSquared), 'Color', settings.colors("Earth-alt"), 'DisplayName', '\langle G^2 \rangle');
+plot(fTrials(forceIndex).results.frameTime, fTrials(forceIndex).results.forceData / max(fTrials(forceIndex).results.forceData), 'Color', settings.colors("Micro-alt"), 'DisplayName', 'Load Cell');
+
+xlabel('Time [s]');
+legend()
+
+set(gcf,'visible','off')
+printfig(4, 'MethodComparison-All');
+savePDF('MethodComparison-All');
+
+% From: https://stackoverflow.com/questions/25729784/how-to-draw-an-arrow-in-matlab
+function drawArrow(x, y, props)
+
+h = annotation('arrow');
+set(h,'parent', gca, ...
+    'position', [x(1),y(1),x(2)-x(1),y(2)-y(1)], ...
+    'HeadLength', 45, 'HeadWidth', 40, props{:}, 'LineStyle', 'none');
+
+end
+
+end

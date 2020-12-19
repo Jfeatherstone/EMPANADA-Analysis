@@ -1,5 +1,5 @@
 
-function GSquaredPostprocessing(startupFile, matFileContainingTrials)
+function GSquaredPostprocessing(matFileContainingTrials)
 
 % In case data is not provided, we default to the output of BrightnessAnalysis
 if ~exist('matFileContainingTrials', 'var')
@@ -34,10 +34,40 @@ figureHeight = 480;
 % Adjust the font to be a little smaller, and rerun our startup
 % NOTE: If working on lab machines, change startup_laptop to startup_eno
 settings.charfrac = .7;
-run(startupFile);
+startup;
 
 % Set the colors of our lines
 gSquaredLineColor = '#0072BD'; % Default blue
+
+% Also create a sample graph with a trial from each gravity at the same
+% speed
+
+figure((length(trials) + 1) * 4);
+hold on;
+
+% I've chosen these by just examining the trial list
+% They're all 8.5 mm/s trials (which is what used to be called 210 mm/s)
+lunarTrial = 1;
+martianTrial = 5;
+microTrial = 19;
+
+set(gcf, 'Position', [0, 0, figureWidth, figureHeight]);
+title([trials(lunarTrial).speed, ' mm/s Probe Velocity'])
+xlabel('Probe position [mm]');
+ylabel('\langle G^2 \rangle - G_i^2');
+yticks([])
+
+% Multiply by the correct speed (8.5) to convert time to position
+plot(trials(microTrial).results.frameTime * 8.5, trials(microTrial).results.averageGSquared - mean(trials(microTrial).results.averageGSquared(1:10)), 'Color', settings.colors(trials(microTrial).gravity), 'DisplayName', trials(microTrial).gravity);
+plot(trials(lunarTrial).results.frameTime * 8.5, trials(lunarTrial).results.averageGSquared - mean(trials(lunarTrial).results.averageGSquared(1:10)), 'Color', settings.colors(trials(lunarTrial).gravity), 'DisplayName', trials(lunarTrial).gravity);
+plot(trials(martianTrial).results.frameTime * 8.5, trials(martianTrial).results.averageGSquared  - mean(trials(martianTrial).results.averageGSquared(1:10)), 'Color', settings.colors(trials(martianTrial).gravity), 'DisplayName', trials(martianTrial).gravity);
+
+legend('Location', 'northeast')
+
+printfig((length(trials) + 1) * 4, 'SampleGSquaredComparison');
+savePDF('SampleGSquaredComparison');
+return
+
 
 for i=1: length(trials)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
